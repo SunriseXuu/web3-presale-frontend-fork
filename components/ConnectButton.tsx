@@ -12,8 +12,8 @@ export default function ConnectButton() {
       setLoading(true);
       const data = await loginWithSolana();
       setUser(data.user);
-    } catch (err: any) {
-      alert(err.message);
+    } catch (e) {
+      alert((e as Error).message);
     } finally {
       setLoading(false);
     }

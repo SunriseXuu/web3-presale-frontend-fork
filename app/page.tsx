@@ -56,7 +56,7 @@ export default function HomePage() {
 
         <div className="absolute inset-x-4 bottom-4 flex flex-col gap-2">
           <h1 className="text-2xl font-bold leading-tight drop-shadow">
-            The Only Web3 Presale Platform You'll Ever Need
+            The Only Web3 Presale Platform You&apos;ll Ever Need
           </h1>
           <hr className="border-zinc-500" />
           <div className="flex items-center gap-4">

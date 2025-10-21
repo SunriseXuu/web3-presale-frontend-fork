@@ -12,7 +12,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="zh">
       <body className="bg-surface text-white scrollbar-hide">
-        <main className="max-w-[450px] w-full mx-auto">
+        <main className="max-w-[450px] min-w-[350px] mx-auto">
           {children}
           <AppTabbar />
         </main>
