@@ -26,19 +26,15 @@ export default function ConnectButton() {
 
   if (user) {
     return (
-      <button onClick={handleLogout} className="w-full bg-gray-800 text-white py-2 rounded-lg mt-2">
-        退出登录 ({user.wallet_address.slice(0, 6)}...)
+      <button onClick={handleLogout} className="w-2/3 rounded-xl py-2.5">
+        Logout ({user.wallet_address.slice(0, 6)}...)
       </button>
     );
   }
 
   return (
-    <button
-      onClick={handleLogin}
-      disabled={loading}
-      className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold"
-    >
-      {loading ? "连接中..." : "连接 Phantom 钱包"}
+    <button onClick={handleLogin} disabled={loading} className="w-2/3 bg-primary font-semibold rounded-xl py-2.5">
+      {loading ? "Connecting..." : "Connect Wallet"}
     </button>
   );
 }
