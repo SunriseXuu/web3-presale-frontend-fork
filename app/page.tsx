@@ -2,6 +2,7 @@ import Image from "next/image";
 
 import ProductCard from "@/components/ProductCard";
 import ProcessCard from "@/components/ProcessCard";
+import FaqCard from "@/components/FaqCard";
 import EarlyAccessForm from "@/components/EarlyAccessForm";
 
 const products = [
@@ -20,6 +21,24 @@ const processSteps = [
   { process: 2, content: "Browse and select products you like from the gallery." },
   { process: 3, content: "Complete your purchase using USDC." },
   { process: 4, content: "Enjoy your products delivered to your doorstep!" },
+];
+
+const faqs = [
+  {
+    id: 1,
+    question: "What payment methods are accepted?",
+    answer: "We accept payments in USDC via Solana wallets.",
+  },
+  {
+    id: 2,
+    question: "How do I connect my wallet?",
+    answer: "Click on the Connect Wallet button in Account page and follow the instructions.",
+  },
+  {
+    id: 3,
+    question: "When will I receive my products?",
+    answer: "Products will be shipped within 5-7 business days after purchase.",
+  },
 ];
 
 export default function HomePage() {
@@ -65,6 +84,16 @@ export default function HomePage() {
         {processSteps.map((step) => (
           <ProcessCard key={step.process} {...step} />
         ))}
+      </section>
+
+      <section className="flex flex-col px-6 gap-4">
+        <h1 className="text-2xl font-bold">FAQs</h1>
+
+        <div className="flex flex-col gap-4">
+          {faqs.map((faq) => (
+            <FaqCard key={faq.id} {...faq} />
+          ))}
+        </div>
       </section>
 
       <section className="flex flex-col px-6 gap-4">
