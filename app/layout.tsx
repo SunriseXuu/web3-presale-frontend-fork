@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "@solana/wallet-adapter-react-ui/styles.css";
+import AppTabbar from "@/components/AppTabbar";
 
 export const metadata: Metadata = {
   title: "Web3 商品预售",
@@ -10,8 +11,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="zh">
-      <body className="scrollbar-hide">
-        <main className="max-w-[768px] w-full text-gray-900 mx-auto px-4">{children}</main>
+      <body className="bg-surface text-white p-6 scrollbar-hide">
+        <main className="max-w-[450px] w-full mx-auto">
+          {children}
+          <AppTabbar />
+        </main>
       </body>
     </html>
   );
