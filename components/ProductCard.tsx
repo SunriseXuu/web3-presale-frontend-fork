@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function ProductCard({ name, price, img }: { name: string; price: number; img: string }) {
   return (
-    <div className="bg-neutral rounded-xl shadow-sm flex flex-col items-center overflow-hidden gap-2">
+    <div className="flex flex-col items-center bg-neutral rounded-xl overflow-hidden gap-2">
       <Image className="w-full object-cover" src={img} alt={name} width={96} height={96} />
 
       <div className="flex flex-col items-center px-3 pb-4 gap-2">

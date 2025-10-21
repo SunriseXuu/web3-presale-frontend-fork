@@ -2,6 +2,7 @@ import Image from "next/image";
 
 import ProductCard from "@/components/ProductCard";
 import ProcessCard from "@/components/ProcessCard";
+import EarlyAccessForm from "@/components/EarlyAccessForm";
 
 const products = [
   { id: 1, name: "Shampoo", price: 9.99, img: "/shampoo.png" },
@@ -64,6 +65,11 @@ export default function HomePage() {
         {processSteps.map((step) => (
           <ProcessCard key={step.process} {...step} />
         ))}
+      </section>
+
+      <section className="flex flex-col px-6 gap-4">
+        <h1 className="text-2xl font-bold">Join for Early Access</h1>
+        <EarlyAccessForm />
       </section>
     </div>
   );
