@@ -1,17 +1,24 @@
 import ProductCard from "@/components/ProductCard";
 
 const products = [
-  { id: 1, name: "去屑洗发水", price: "9.99 USDC", img: "/shampoo.jpg" },
-  { id: 2, name: "护发素", price: "12.5 USDC", img: "/conditioner.jpg" },
+  { id: 1, name: "Shampoo", price: 9.99, img: "/shampoo.png" },
+  { id: 2, name: "Conditioner", price: 12.5, img: "/conditioner.png" },
+  { id: 3, name: "Lotion", price: 15.0, img: "/lotion.png" },
+  { id: 4, name: "Sunscreen", price: 20.0, img: "/sunscreen.png" },
+  { id: 5, name: "Cleanser", price: 8.0, img: "/cleanser.png" },
+  { id: 6, name: "Face Mask", price: 5.5, img: "/facemask.png" },
+  { id: 7, name: "Lip Balm", price: 3.0, img: "/lipbalm.png" },
+  { id: 8, name: "Body Lotion", price: 18.0, img: "/bodylotion.png" },
 ];
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen p-4">
-      <h1 className="text-lg font-bold mb-4">🔥 限时预售</h1>
+    <main className="min-h-screen flex flex-col gap-4">
+      <h1 className="text-2xl font-bold">Web3 Presale on Solana</h1>
+
       <div className="grid grid-cols-2 gap-3">
-        {products.map((p) => (
-          <ProductCard key={p.id} product={p} />
+        {products.map((product) => (
+          <ProductCard key={product.id} {...product} />
         ))}
       </div>
     </main>
