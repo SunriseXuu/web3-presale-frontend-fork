@@ -26,14 +26,18 @@ export default function ConnectButton() {
 
   if (user) {
     return (
-      <button onClick={handleLogout} className="w-2/3 rounded-xl py-2.5">
+      <button onClick={handleLogout} className="w-2/3 rounded-xl select-none py-2.5">
         Logout ({user.wallet_address.slice(0, 6)}...)
       </button>
     );
   }
 
   return (
-    <button onClick={handleLogin} disabled={loading} className="w-2/3 bg-primary font-semibold rounded-xl py-2.5">
+    <button
+      onClick={handleLogin}
+      disabled={loading}
+      className="w-2/3 bg-primary font-semibold rounded-xl select-none py-2.5"
+    >
       {loading ? "Connecting..." : "Connect Wallet"}
     </button>
   );

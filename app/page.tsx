@@ -1,9 +1,17 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import ProductCard from "@/components/ProductCard";
 import ProcessCard from "@/components/ProcessCard";
 import FaqCard from "@/components/FaqCard";
 import EarlyAccessForm from "@/components/EarlyAccessForm";
+
+const socialMedias = [
+  { name: "X", url: "https://x.com", icon: "/x.svg", width: 16, height: 16 },
+  { name: "Discord", url: "https://discord.com", icon: "/discord.svg", width: 20, height: 20 },
+  { name: "Facebook", url: "https://facebook.com", icon: "/facebook.svg", width: 20, height: 20 },
+  { name: "YouTube", url: "https://youtube.com", icon: "/youtube.svg", width: 22, height: 22 },
+];
 
 const products = [
   { id: 1, name: "Shampoo", price: 9.99, img: "/shampoo.png" },
@@ -60,10 +68,11 @@ export default function HomePage() {
           </h1>
           <hr className="border-zinc-500" />
           <div className="flex items-center gap-4">
-            <Image src="/x.svg" alt="X" width={16} height={16} />
-            <Image src="/discord.svg" alt="Discord" width={20} height={20} />
-            <Image src="/facebook.svg" alt="Facebook" width={20} height={20} />
-            <Image src="/youtube.svg" alt="YouTube" width={22} height={22} />
+            {socialMedias.map((media) => (
+              <Link key={media.name} href={media.url} target="_blank" rel="noopener noreferrer">
+                <Image src={media.icon} alt={media.name} width={media.width} height={media.height} />
+              </Link>
+            ))}
           </div>
         </div>
       </section>
