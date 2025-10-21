@@ -4,7 +4,7 @@ import ConnectButton from "@/components/ConnectButton";
 
 export default function page() {
   return (
-    <div className="min-h-screen flex flex-col gap-4">
+    <div className="min-h-screen flex flex-col p-6 gap-4">
       <h1 className="text-2xl font-bold">My Account</h1>
 
       <div className="flex items-center gap-5">
