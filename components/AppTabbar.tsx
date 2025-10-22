@@ -9,7 +9,7 @@ export default function AppTabbar() {
 
   return (
     <>
-      <footer className="max-w-[450px] min-w-[350px] h-[70px] fixed bottom-0 left-0 right-0 select-none mx-auto z-50">
+      <footer className="max-w-[450px] min-w-[350px] h-[70px] fixed bottom-0 left-0 right-0 select-none mx-auto z-40">
         <div className="w-[70%] h-[75%] absolute top-0 left-1/2 -translate-x-1/2 flex justify-between items-center bg-neutral/60 backdrop-blur rounded-full">
           <div />
 

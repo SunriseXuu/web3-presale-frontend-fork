@@ -12,9 +12,9 @@ export default function EarlyAccessForm() {
   return (
     <form action={submitEmailAction} className="flex flex-col gap-4">
       <input
-        type="email"
-        placeholder="Enter your email"
         className="w-full px-4 py-2 rounded-lg bg-neutral border border-zinc-600 focus:border-primary hover:border-primary duration-200 outline-none"
+        placeholder="Enter your email"
+        type="email"
       />
       <button className="w-full h-10 bg-primary rounded-lg font-medium">Join Now</button>
     </form>
