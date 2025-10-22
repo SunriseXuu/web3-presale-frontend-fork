@@ -4,18 +4,23 @@ import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8081/api";
-const COOKIE_NAME = "web3-presale-token";
+import { API_BASE_URL, COOKIE_NAME } from "@/lib/constants";
 
-type ActionType = {
-  data: any;
+// type PagiType = {
+//   page?: number;
+//   pageSize?: number;
+// };
+type ResponseType = {
+  id: string;
   success: boolean;
-  msg: string;
-};
-
-export type PagiType = {
-  page?: number;
-  pageSize?: number;
+  data: {
+    message?: string;
+    [key: string]: any;
+  };
+  error: {
+    code?: string;
+    message?: string;
+  } | null;
 };
 
 // 从 cookie 中提取 JWT
@@ -23,11 +28,11 @@ function extractJwt(cookieStr?: string): string | null {
   if (!cookieStr) return null;
 
   // 查找 JWT 的位置
-  const startIdx = cookieStr.indexOf("HAISHAN-AUTH=");
+  const startIdx = cookieStr.indexOf("MY_SHOP_AUTH=");
   if (startIdx === -1) return null; // 没有找到
 
   // 计算 JWT 的长度
-  const authPrefixLength = "HAISHAN-AUTH=".length;
+  const authPrefixLength = "MY_SHOP_AUTH=".length;
 
   // 获取 JWT 后面的内容
   const valueStartIdx = startIdx + authPrefixLength;
@@ -54,7 +59,7 @@ export default async function requestHandler({
   query?: Record<string, string | number>;
   reqBody?: Record<string, any>;
   pathname?: string;
-}): Promise<ActionType> {
+}): Promise<ResponseType> {
   try {
     const token = (await cookies()).get(COOKIE_NAME)?.value;
 
@@ -90,7 +95,13 @@ export default async function requestHandler({
 
     return data;
   } catch (error: any) {
-    if (!error.response) return { data: null, success: false, msg: "未知错误" };
+    if (!error.response)
+      return {
+        id: "",
+        success: false,
+        data: { message: "Unknown error occurred" },
+        error,
+      };
     return error.response.data;
   }
 }

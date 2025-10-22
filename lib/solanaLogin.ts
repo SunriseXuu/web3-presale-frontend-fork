@@ -2,6 +2,8 @@
 
 import bs58 from "bs58";
 
+import { getUserNonce, loginUser, logoutUser } from "@/action/users.action";
+
 // Phantom 类型定义
 interface PhantomProvider {
   isPhantom?: boolean;
@@ -32,55 +34,58 @@ export interface LoginResponse {
 }
 
 // 核心登录流程
-export async function loginWithSolana(inviteCode?: string): Promise<LoginResponse> {
+export async function loginWithSolana(): Promise<any> {
   const { solana } = window;
-  if (!solana?.isPhantom) throw new Error("请安装 Phantom 钱包");
+  if (!solana?.isPhantom) throw new Error("Please install the Phantom wallet extension");
 
   // 1. 连接钱包
   const { publicKey } = await solana.connect();
   const walletAddress = publicKey.toString();
 
   // 2. 获取 nonce
-  const nonceRes = await fetch("/api/v1/users/nonce", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ wallet_address: walletAddress }),
+  const { data: nonceRes, success: nonceSuccess } = await getUserNonce({
+    wallet_address: walletAddress,
   });
-  const { data: nonceData } = await nonceRes.json();
-  const { message } = nonceData;
+  if (!nonceSuccess) throw new Error("Failed to get nonce");
+  const nonce = nonceRes.nonce;
 
   // 3. 签名消息
-  const encoded = new TextEncoder().encode(message);
+  const encoded = new TextEncoder().encode(nonce);
   const signed = await solana.signMessage(encoded, "utf8");
-  const signature = bs58.encode(signed.signature);
+  // const signature = bs58.encode(signed.signature);
+  const signature = Buffer.from(signed.signature).toString("base64");
+
+  console.log(signature);
 
   // 4. 登录
-  const loginRes = await fetch("/api/v1/users/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      wallet_address: walletAddress,
-      signature,
-      invite_code: inviteCode,
-    }),
+  const {
+    data: loginRes,
+    success: loginSuccess,
+    error: loginError,
+  } = await loginUser({
+    wallet_address: walletAddress,
+    signature,
   });
+  console.log(loginError);
+  if (!loginSuccess) throw new Error("Failed to log in");
+  const { token, user } = loginRes;
 
-  const { data: loginData } = await loginRes.json();
-  const { token, user } = loginData;
+  // if (typeof window !== "undefined" && typeof window.localStorage !== "undefined") {
+  //   localStorage.setItem("auth_token", token);
+  //   localStorage.setItem("user", JSON.stringify(user));
+  // }
 
-  if (typeof window !== "undefined" && typeof window.localStorage !== "undefined") {
-    localStorage.setItem("auth_token", token);
-    localStorage.setItem("user", JSON.stringify(user));
-  }
-
-  return loginData;
+  // return loginData;
 }
 
-export function logout() {
+// 登出
+export async function logout() {
   if (typeof window !== "undefined" && typeof window.localStorage !== "undefined") {
     localStorage.removeItem("auth_token");
     localStorage.removeItem("user");
   }
+
+  await logoutUser();
   window.solana?.disconnect();
 }
 
