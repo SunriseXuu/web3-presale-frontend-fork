@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import axios from "axios";
 
-import { API_BASE_URL, COOKIE_NAME } from "@/lib/constants";
+import { API_BASE_URL, AUTH_COOKIE } from "@/lib/constants";
 
 // type PagiType = {
 //   page?: number;
@@ -15,35 +15,13 @@ type ResponseType = {
   success: boolean;
   data: {
     message?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
   error: {
     code?: string;
     message?: string;
   } | null;
 };
-
-// 从 cookie 中提取 JWT
-function extractJwt(cookieStr?: string): string | null {
-  if (!cookieStr) return null;
-
-  // 查找 JWT 的位置
-  const startIdx = cookieStr.indexOf("MY_SHOP_AUTH=");
-  if (startIdx === -1) return null; // 没有找到
-
-  // 计算 JWT 的长度
-  const authPrefixLength = "MY_SHOP_AUTH=".length;
-
-  // 获取 JWT 后面的内容
-  const valueStartIdx = startIdx + authPrefixLength;
-  const valueEndIdx = cookieStr.indexOf(";", valueStartIdx);
-
-  // 如果没有找到分号，说明这是字符串的末尾
-  const value =
-    valueEndIdx !== -1 ? cookieStr.substring(valueStartIdx, valueEndIdx) : cookieStr.substring(valueStartIdx);
-
-  return value;
-}
 
 export default async function requestHandler({
   endPoint,
@@ -57,11 +35,11 @@ export default async function requestHandler({
   method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   params?: Record<string, string | number>;
   query?: Record<string, string | number>;
-  reqBody?: Record<string, any>;
+  reqBody?: Record<string, unknown>;
   pathname?: string;
 }): Promise<ResponseType> {
   try {
-    const token = (await cookies()).get(COOKIE_NAME)?.value;
+    const token = (await cookies()).get(AUTH_COOKIE)?.value;
 
     // 处理 params
     let url = `${API_BASE_URL}${endPoint}`;
@@ -80,28 +58,32 @@ export default async function requestHandler({
           .join("&");
 
     // 构造请求
-    const { data, headers } = await axios({
+    const { data } = await axios({
       url: url + queryString,
       method,
       headers: { Authorization: token ? `Bearer ${token}` : "" },
       data: reqBody,
     });
 
-    // 如果有设置Cookie，则更新
-    if (headers["set-cookie"]) (await cookies()).set(COOKIE_NAME, extractJwt(headers["set-cookie"]?.at(0))!);
-
     // 如果提供了pathname，则重新验证该路径
     if (pathname) revalidatePath(pathname);
 
     return data;
-  } catch (error: any) {
-    if (!error.response)
-      return {
-        id: "",
-        success: false,
-        data: { message: "Unknown error occurred" },
-        error,
-      };
-    return error.response.data;
+  } catch (error: unknown) {
+    // 类型守卫，判断 error 是否为 AxiosError
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error &&
+      (error as { response?: unknown }).response
+    )
+      return (error as { response: { data: ResponseType } }).response.data;
+
+    return {
+      id: "",
+      success: false,
+      data: { message: "Unknown error occurred" },
+      error: { message: typeof error === "string" ? error : undefined },
+    };
   }
 }

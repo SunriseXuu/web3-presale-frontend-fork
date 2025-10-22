@@ -9,8 +9,8 @@ export default function ProductCard({ name, price, img }: { name: string; price:
 
   // 处理购买逻辑
   async function handlePurchase() {
-    try {
-    } catch (error) {}
+    // try {
+    // } catch (error) {}
 
     setModalFlag(false);
   }
@@ -48,10 +48,10 @@ export default function ProductCard({ name, price, img }: { name: string; price:
 
             <h2 className="text-lg font-medium leading-none">Select Quantity</h2>
 
-            <div className="flex justify-between items-end gap-4">
+            <div className="flex justify-between items-center gap-6">
               <Image className="basis-2/5 object-cover rounded-xl" src={img} alt={name} width={96} height={96} />
 
-              <div className="basis-3/5 flex flex-col items-end select-none gap-4">
+              <div className="basis-3/5 flex flex-col items-start select-none gap-4">
                 <h3 className="font-medium">{name}</h3>
 
                 <div className="flex items-center gap-1.5">

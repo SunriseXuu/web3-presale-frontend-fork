@@ -2,19 +2,16 @@
 
 import { useState } from "react";
 
-import { getUserNonce, loginUser } from "@/action/users.action";
-import { loginWithSolana, logout, getCurrentUser } from "@/lib/solanaLogin";
+import { loginWithSolana, logout } from "@/lib/solana_auth";
 
-export default function ConnectButton() {
-  const [user, setUser] = useState(getCurrentUser());
-  const [loading, setLoading] = useState(false);
+export default function ConnectButton({ walletAddress }: { walletAddress: string }) {
+  const [loading, setLoading] = useState<boolean>(false);
 
   // 处理登录
   async function handleLogin() {
     try {
       setLoading(true);
-      const data = await loginWithSolana();
-      setUser(data.user);
+      await loginWithSolana();
     } catch (e) {
       alert((e as Error).message);
     } finally {
@@ -22,22 +19,26 @@ export default function ConnectButton() {
     }
   }
 
-  function handleLogout() {
-    logout();
-    setUser(null);
-  }
-
-  if (user) {
+  if (walletAddress)
     return (
-      <button onClick={handleLogout} className="w-2/3 rounded-xl select-none py-2.5">
-        Logout ({user.wallet_address.slice(0, 6)}...)
-      </button>
+      <div className="w-2/3 flex flex-col gap-2">
+        <span>
+          Wallet Address: {walletAddress.toUpperCase().slice(0, 6)}...{walletAddress.toUpperCase().slice(-6)}
+        </span>
+        <button
+          className="bg-primary font-semibold rounded-xl select-none cursor-pointer py-2"
+          type="button"
+          onClick={logout}
+        >
+          Disconnect
+        </button>
+      </div>
     );
-  }
 
   return (
     <button
-      className="w-2/3 bg-primary font-semibold rounded-xl select-none py-2.5"
+      className="w-2/3 bg-primary font-semibold rounded-xl select-none cursor-pointer py-2.5"
+      type="button"
       disabled={loading}
       onClick={handleLogin}
     >

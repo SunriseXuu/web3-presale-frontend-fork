@@ -1,8 +1,11 @@
 import Image from "next/image";
 
 import ConnectButton from "@/components/ConnectButton";
+import { getCurrentUser } from "@/action/users.action";
 
-export default function page() {
+export default async function page() {
+  const user = await getCurrentUser();
+
   return (
     <div className="min-h-screen flex flex-col py-4 gap-6">
       <section className="flex flex-col px-4 gap-4">
@@ -16,7 +19,7 @@ export default function page() {
             width={96}
             height={96}
           />
-          <ConnectButton />
+          <ConnectButton walletAddress={user?.wallet_address || ""} />
         </div>
       </section>
 
