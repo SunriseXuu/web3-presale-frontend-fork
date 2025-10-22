@@ -1,17 +1,8 @@
 import Image from "next/image";
-import Link from "next/link";
 
 import ProductCard from "@/components/ProductCard";
 import ProcessCard from "@/components/ProcessCard";
 import FaqCard from "@/components/FaqCard";
-import EarlyAccessForm from "@/components/EarlyAccessForm";
-
-const socialMedias = [
-  { name: "X", url: "https://x.com", icon: "/x.svg", width: 16, height: 16 },
-  { name: "Discord", url: "https://discord.com", icon: "/discord.svg", width: 20, height: 20 },
-  { name: "Facebook", url: "https://facebook.com", icon: "/facebook.svg", width: 20, height: 20 },
-  { name: "YouTube", url: "https://youtube.com", icon: "/youtube.svg", width: 22, height: 22 },
-];
 
 const products = [
   { id: 1, name: "Shampoo", price: 9.99, img: "/shampoo.png" },
@@ -49,9 +40,9 @@ const faqs = [
   },
 ];
 
-export default function HomePage() {
+export default function page() {
   return (
-    <div className="min-h-screen flex flex-col pb-6 gap-6">
+    <div className="min-h-screen flex flex-col pb-4 gap-6">
       <section className="relative h-64 overflow-hidden">
         <Image
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-auto object-cover z-0"
@@ -66,18 +57,10 @@ export default function HomePage() {
           <h1 className="text-2xl font-bold leading-tight drop-shadow">
             The Only Web3 Presale Platform You&apos;ll Ever Need
           </h1>
-          <hr className="border-zinc-500" />
-          <div className="flex items-center gap-4">
-            {socialMedias.map((media) => (
-              <Link key={media.name} href={media.url} target="_blank" rel="noopener noreferrer">
-                <Image src={media.icon} alt={media.name} width={media.width} height={media.height} />
-              </Link>
-            ))}
-          </div>
         </div>
       </section>
 
-      <section className="flex flex-col px-6 gap-4">
+      <section className="flex flex-col px-4 gap-4">
         <h1 className="text-2xl font-bold">Products Gallery</h1>
 
         <div className="grid grid-cols-2 gap-3">
@@ -87,7 +70,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="flex flex-col px-6 gap-4">
+      <section className="flex flex-col px-4 gap-4">
         <h1 className="text-2xl font-bold">Purchase Process</h1>
 
         {processSteps.map((step) => (
@@ -95,7 +78,7 @@ export default function HomePage() {
         ))}
       </section>
 
-      <section className="flex flex-col px-6 gap-4">
+      <section className="flex flex-col px-4 gap-4">
         <h1 className="text-2xl font-bold">FAQs</h1>
 
         <div className="flex flex-col gap-4">
@@ -103,11 +86,6 @@ export default function HomePage() {
             <FaqCard key={faq.id} {...faq} />
           ))}
         </div>
-      </section>
-
-      <section className="flex flex-col px-6 gap-4">
-        <h1 className="text-2xl font-bold">Join for Early Access</h1>
-        <EarlyAccessForm />
       </section>
     </div>
   );
