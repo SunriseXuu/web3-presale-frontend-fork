@@ -4,9 +4,18 @@ import ProductCard from "@/components/cards/ProductCard";
 import { getProducts } from "@/action/products.action";
 import { USD_DECIMALS } from "@/lib/constants";
 
+type Product = {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  images: string[];
+  // 可根据实际接口补充更多字段
+};
+
 export default async function page() {
   const { data: productsData } = await getProducts({ status: "active" });
-  const products = ((productsData.products as any[]) || []).map((product) => ({
+  const products: Product[] = ((productsData.products as Product[]) || []).map((product) => ({
     ...product,
     price: product.price / USD_DECIMALS,
   }));

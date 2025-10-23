@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { createOrder } from "@/action/orders.action";
@@ -12,7 +12,7 @@ export default function ProductCard({
   name,
   description,
   price,
-  images,
+  // images,
 }: {
   id: string;
   name: string;

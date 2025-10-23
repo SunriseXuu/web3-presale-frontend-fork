@@ -4,13 +4,19 @@ import Link from "next/link";
 import { getOrders } from "@/action/orders.action";
 import { orderStatusMap } from "@/lib/constants";
 
+type Order = {
+  order_id: string;
+  created_at: string;
+  // 可根据实际接口补充更多字段
+};
+
 export default async function page({ searchParams }: { searchParams: Promise<{ page: string; status: string }> }) {
   const query = await searchParams;
 
   const { data: ordersData } = await getOrders(query.status ? { status: query.status } : {});
-  const orders = (ordersData.orders as any[]) || [];
+  const orders: Order[] = (ordersData.orders as Order[]) || [];
 
-  console.log(orders);
+  // console.log(orders);
 
   return (
     <div className="min-h-screen flex flex-col pb-6 gap-6">
