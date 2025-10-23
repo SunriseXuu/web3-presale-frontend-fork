@@ -1,7 +1,6 @@
 "use client";
 
 import bs58 from "bs58";
-import { usePathname } from "next/navigation";
 
 import { getUserNonce, loginUser, logoutUser } from "@/action/users.action";
 
@@ -25,7 +24,7 @@ interface PhantomProvider {
 }
 
 // 核心登录流程
-export async function loginWithSolana() {
+export async function loginWithSolana(pathname: string) {
   const { solana } = window;
   if (!solana?.isPhantom) throw new Error("Please install the Phantom wallet extension");
 
@@ -47,7 +46,6 @@ export async function loginWithSolana() {
   // const signature = Buffer.from(signed.signature).toString("base64"); // 使用 base64 编码签名
 
   // 4. 登录
-  const pathname = usePathname();
   const { success: loginSuccess } = await loginUser({ wallet_address: walletAddress, signature }, pathname);
   if (!loginSuccess) throw new Error("Failed to log in");
 }
