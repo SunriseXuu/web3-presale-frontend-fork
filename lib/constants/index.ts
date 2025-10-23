@@ -11,20 +11,20 @@ export const orderEntry = [
   {
     href: "/orders?status=pending",
     icon: "/pending-payment.svg",
-    alt: "PendingPayment",
+    alt: "PENDING",
     label: "Pending",
   },
   {
-    href: "/orders?status=shipped",
-    icon: "/pending-shipment.svg",
-    alt: "PendingShipment",
-    label: "To Ship",
+    href: "/orders?status=paid",
+    icon: "/paid.svg",
+    alt: "PAID",
+    label: "Paid",
   },
   {
-    href: "/orders?status=delivered",
-    icon: "/pending-receipt.svg",
-    alt: "PendingReceipt",
-    label: "To Receive",
+    href: "/orders?status=cancelled",
+    icon: "/cancelled.svg",
+    alt: "CANCELLED",
+    label: "Cancelled",
   },
   {
     href: "/orders?status=refund",
@@ -32,6 +32,14 @@ export const orderEntry = [
     alt: "Refund",
     label: "Refund",
   },
+];
+
+// 订单状态常量
+export const orderStatusMap = [
+  { label: "All", value: "" },
+  { label: "Pending", value: "pending" },
+  { label: "Paid", value: "paid" },
+  { label: "Cancelled", value: "cancelled" },
 ];
 
 // 购买流程步骤常量

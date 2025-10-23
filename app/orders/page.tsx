@@ -1,5 +1,64 @@
-import React from "react";
+import Image from "next/image";
+import Link from "next/link";
 
-export default function page() {
-  return <div>Orders Page</div>;
+import { getOrders } from "@/action/orders.action";
+import { orderStatusMap } from "@/lib/constants";
+
+export default async function page({ searchParams }: { searchParams: Promise<{ page: string; status: string }> }) {
+  const query = await searchParams;
+
+  const { data: ordersData } = await getOrders(query.status ? { status: query.status } : {});
+  const orders = (ordersData.orders as any[]) || [];
+
+  console.log(orders);
+
+  return (
+    <div className="min-h-screen flex flex-col pb-6 gap-6">
+      <section className="h-16 flex justify-between items-end bg-primary px-4 pb-2">
+        <Link href="/me">
+          <Image
+            className="w-6 h-6 cursor-pointer rotate-180"
+            src="/chevron-r.svg"
+            alt="ChevronR"
+            width={24}
+            height={24}
+          />
+        </Link>
+        <p className="font-bold">My Orders</p>
+        <div className="w-6" />
+      </section>
+
+      <div className="flex items-center px-4 gap-2">
+        {orderStatusMap.map((item) => (
+          <Link
+            key={item.value || "all"}
+            href={item.value ? `/orders?status=${item.value}` : "/orders"}
+            className={`${
+              query.status === item.value || (!query.status && item.value === "") ? "bg-primary" : "bg-neutral"
+            } text-sm rounded-sm px-2.5 py-0.5`}
+          >
+            {item.label}
+          </Link>
+        ))}
+      </div>
+
+      <section className="flex flex-col px-4 gap-4">
+        {orders.length === 0 ? (
+          <p className="text-center text-neutral-500 py-6">No orders found.</p>
+        ) : (
+          orders.map((order) => (
+            <div
+              key={order.order_id}
+              className="flex flex-col bg-surface rounded-xl p-4 gap-2 border border-neutral-800"
+            >
+              <div className="flex justify-between items-center">
+                <p className="font-medium">Order ID: {order.order_id}</p>
+                <p className="text-sm text-neutral-500">{new Date(order.created_at).toLocaleDateString()}</p>
+              </div>
+            </div>
+          ))
+        )}
+      </section>
+    </div>
+  );
 }
