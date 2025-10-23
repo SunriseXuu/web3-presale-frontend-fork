@@ -4,6 +4,8 @@ import ProductCard from "@/components/ProductCard";
 import ProcessCard from "@/components/ProcessCard";
 import FaqCard from "@/components/FaqCard";
 
+import { getProducts } from "@/action/products.action";
+
 const products = [
   { id: 1, name: "Shampoo", price: 9.99, img: "/shampoo.png" },
   { id: 2, name: "Conditioner", price: 12.5, img: "/conditioner.png" },
@@ -40,7 +42,10 @@ const faqs = [
   },
 ];
 
-export default function page() {
+export default async function page() {
+  const { data: productsData } = await getProducts();
+  console.log("Products Data:", productsData);
+
   return (
     <div className="min-h-screen flex flex-col pb-4 gap-6">
       <section className="relative h-64 overflow-hidden">

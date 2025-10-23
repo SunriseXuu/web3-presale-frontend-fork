@@ -33,8 +33,8 @@ export default async function requestHandler({
 }: {
   endPoint: string;
   method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-  params?: Record<string, string | number>;
-  query?: Record<string, string | number>;
+  params?: Record<string, string | number | bigint>;
+  query?: Record<string, string | number | bigint>;
   reqBody?: Record<string, unknown>;
   pathname?: string;
 }): Promise<ResponseType> {

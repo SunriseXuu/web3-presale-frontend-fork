@@ -22,11 +22,12 @@ export const getUserNonce = async (query: { wallet_address: string }) =>
   });
 
 // 登录用户
-export const loginUser = async (reqBody: { wallet_address: string; signature: string }) => {
+export const loginUser = async (reqBody: { wallet_address: string; signature: string }, pathname: string) => {
   const res = await requestHandler({
     endPoint: "/users/login",
     method: "POST",
     reqBody,
+    pathname,
   });
 
   // 如果有JWT和USER，则存储到cookie

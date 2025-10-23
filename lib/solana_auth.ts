@@ -1,6 +1,7 @@
 "use client";
 
 import bs58 from "bs58";
+import { usePathname } from "next/navigation";
 
 import { getUserNonce, loginUser, logoutUser } from "@/action/users.action";
 
@@ -42,14 +43,12 @@ export async function loginWithSolana() {
   // 3. 签名消息
   const encoded = new TextEncoder().encode(message);
   const signed = await solana.signMessage(encoded, "utf8");
-  const signature = bs58.encode(signed.signature);
-  // const signature = Buffer.from(signed.signature).toString("base64");
+  const signature = bs58.encode(signed.signature); // 使用 base58 编码签名
+  // const signature = Buffer.from(signed.signature).toString("base64"); // 使用 base64 编码签名
 
   // 4. 登录
-  const { success: loginSuccess } = await loginUser({
-    wallet_address: walletAddress,
-    signature,
-  });
+  const pathname = usePathname();
+  const { success: loginSuccess } = await loginUser({ wallet_address: walletAddress, signature }, pathname);
   if (!loginSuccess) throw new Error("Failed to log in");
 }
 
