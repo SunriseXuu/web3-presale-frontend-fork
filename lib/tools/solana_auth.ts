@@ -4,28 +4,9 @@ import bs58 from "bs58";
 
 import { getUserNonce, loginUser, logoutUser } from "@/action/users.action";
 
-declare global {
-  interface Window {
-    solana?: PhantomProvider;
-  }
-}
-
-// Phantom 类型定义
-interface PhantomProvider {
-  isPhantom?: boolean;
-  connect: () => Promise<{ publicKey: { toString(): string } }>;
-  disconnect: () => Promise<void>;
-  signMessage: (
-    message: Uint8Array,
-    encoding: string
-  ) => Promise<{
-    signature: Uint8Array;
-  }>;
-}
-
 // 核心登录流程
 export async function loginWithSolana(pathname: string) {
-  const { solana } = window;
+  const { solana } = window as any;
   if (!solana?.isPhantom) throw new Error("Please install the Phantom wallet extension");
 
   // 1. 连接钱包
@@ -53,5 +34,5 @@ export async function loginWithSolana(pathname: string) {
 // 登出
 export async function logout(pathname: string) {
   await logoutUser(pathname);
-  window.solana?.disconnect();
+  (window as any).solana?.disconnect();
 }

@@ -2,7 +2,7 @@
 
 import { clusterApiUrl, PublicKey, Connection } from "@solana/web3.js";
 import { getAssociatedTokenAddress } from "@solana/spl-token";
-import { Program, AnchorProvider, utils, BN, setProvider, Idl } from "@coral-xyz/anchor";
+import { Program, AnchorProvider, utils, BN, setProvider } from "@coral-xyz/anchor";
 
 import idl from "@/lib/idl/presale_contract.json";
 import { USD_DECIMALS } from "@/lib/constants";
@@ -21,7 +21,7 @@ export default async function payWithSolana({
   paymentMint: string; // USDC/USDT 的 mint 地址（公钥字符串）
 }) {
   const { solana } = window as any;
-  if (!solana?.isPhantom) throw new Error("请先安装 Phantom 钱包");
+  if (!solana?.isPhantom) throw new Error("Please install the Phantom wallet extension");
 
   // 请求连接钱包
   const resp = await solana.connect();
@@ -33,7 +33,7 @@ export default async function payWithSolana({
   setProvider(provider);
 
   // 2. 创建 Program 客户端
-  const programId = new PublicKey((idl as any).address);
+  const programId = new PublicKey(idl.address);
   const program = new Program(idl, provider);
 
   // 3. Derive PDA for config
