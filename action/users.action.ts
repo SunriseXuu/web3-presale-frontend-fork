@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import requestHandler from "@/lib/request";
+import requestHandler from "@/lib/utils/request";
 import { AUTH_COOKIE, USER_COOKIE } from "@/lib/constants";
 
 // 获取当前登录用户信息
@@ -48,9 +48,9 @@ export const loginUser = async (reqBody: { wallet_address: string; signature: st
 };
 
 // 登出当前登录用户
-export async function logoutUser() {
+export async function logoutUser(pathname: string) {
   (await cookies()).delete(AUTH_COOKIE);
   (await cookies()).delete(USER_COOKIE);
 
-  redirect("/me");
+  redirect(pathname);
 }

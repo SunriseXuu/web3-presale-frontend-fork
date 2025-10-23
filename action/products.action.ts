@@ -1,6 +1,6 @@
 "use server";
 
-import requestHandler from "@/lib/request";
+import requestHandler from "@/lib/utils/request";
 
 // 获取所有 products 列表
 export const getProducts = async (query?: {

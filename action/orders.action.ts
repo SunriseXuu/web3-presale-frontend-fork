@@ -1,6 +1,6 @@
 "use server";
 
-import requestHandler from "@/lib/request";
+import requestHandler from "@/lib/utils/request";
 
 // 获取登录用户所有 orders 列表
 export const getOrders = async (query?: { status?: string; page?: number; page_size?: number }) =>
