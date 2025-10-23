@@ -59,17 +59,9 @@ export default function ProductCard({
                     height={96}
                   />
 
-                  <div className="basis-2/3 flex flex-col items-start select-none gap-3">
-                    <div className="w-full flex justify-between items-center">
-                      <h3 className="font-medium line-clamp-1">{name}</h3>
-                      <div className="flex items-center bg-primary px-1.5 rounded-sm">
-                        <Image src="/dollar.svg" alt="DOLLAR" width={12} height={12} />
-                        <span className="text-sm">{price}</span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <p className="text-xs text-zinc-400">Buy with</p>
+                  <div className="basis-2/3 flex flex-col items-start select-none gap-4">
+                    <div className="flex items-center">
+                      <p className="w-16 text-xs text-zinc-400">Buy with</p>
                       <select
                         className="w-20 h-6 bg-neutral text-center text-xs border border-zinc-600 focus:border-primary hover:border-primary duration-200 rounded outline-none"
                         defaultValue="USDC"
@@ -80,8 +72,8 @@ export default function ProductCard({
                       </select>
                     </div>
 
-                    <div className="flex items-center gap-3">
-                      <p className="text-xs text-zinc-400">Amount</p>
+                    <div className="flex items-center">
+                      <p className="w-16 text-xs text-zinc-400">Amount</p>
 
                       <div className="flex items-center gap-0.5">
                         <button
@@ -110,6 +102,13 @@ export default function ProductCard({
                   </div>
                 </div>
 
+                <div className="w-full flex justify-between items-center">
+                  <h3 className="font-medium line-clamp-1">{name}</h3>
+                  <div className="flex items-center bg-primary px-2 py-0.5 rounded-sm">
+                    <Image src="/dollar.svg" alt="DOLLAR" width={10} height={12} />
+                    <span className="text-xs">{price}</span>
+                  </div>
+                </div>
                 <p className="text-xs text-zinc-300 line-clamp-6">{description}</p>
 
                 <button

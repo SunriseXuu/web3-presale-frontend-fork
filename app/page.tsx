@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import ProductCard from "@/components/cards/ProductCard";
 import { getProducts } from "@/action/products.action";
-import { LAMPORTS } from "@/lib/constants";
+import { USD_DECIMALS } from "@/lib/constants";
 
 export default async function page() {
   const { data: productsData } = await getProducts();
@@ -10,7 +10,7 @@ export default async function page() {
 
   const products = ((productsData.products as any[]) || []).map((product) => ({
     ...product,
-    price: product.price / LAMPORTS,
+    price: product.price / USD_DECIMALS,
   }));
 
   return (
