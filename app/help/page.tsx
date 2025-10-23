@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import ProcessCard from "@/components/ProcessCard";
-import FaqCard from "@/components/FaqCard";
+import ProcessCard from "@/components/cards/ProcessCard";
+import FaqCard from "@/components/cards/FaqCard";
 
 import { processSteps, faqs } from "@/lib/constants";
 

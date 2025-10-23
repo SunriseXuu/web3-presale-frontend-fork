@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "@solana/wallet-adapter-react-ui/styles.css";
-import AppTabbar from "@/components/AppTabbar";
+import AppTabbar from "@/components/shared/AppTabbar";
 
 export const metadata: Metadata = {
   title: "Web3 商品预售",

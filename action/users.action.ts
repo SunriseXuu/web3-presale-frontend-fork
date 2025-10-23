@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import requestHandler from "@/lib/utils/request";
+import requestHandler from "@/lib/tools/request";
 import { AUTH_COOKIE, USER_COOKIE } from "@/lib/constants";
 
 // 获取当前登录用户信息

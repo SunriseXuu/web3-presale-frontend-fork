@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import ConnectButton from "@/components/ConnectButton";
-import DisconnectButton from "@/components/DisconnectButton";
+import ConnectButton from "@/components/wallet/ConnectButton";
+import DisconnectButton from "@/components/wallet/DisconnectButton";
 
 import { getCurrentUser } from "@/action/users.action";
 import { orderEntry } from "@/lib/constants";

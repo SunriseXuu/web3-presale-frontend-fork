@@ -4,6 +4,8 @@ export const API_BASE_URL = "https://api.coinfair.xyz/my-shop/api/v1";
 export const AUTH_COOKIE = "MY_SHOP_TOKEN";
 export const USER_COOKIE = "MY_SHOP_USER";
 
+export const LAMPORTS = 1000000000; // 1 SOL = 1,000,000,000 Lamports
+
 // 订单入口常量
 export const orderEntry = [
   {

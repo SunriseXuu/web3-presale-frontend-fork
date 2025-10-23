@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 
-import { logout } from "@/lib/utils/solana_auth";
+import { logout } from "@/lib/tools/solana_auth";
 
 export default function DisconnectButton({ walletAddress }: { walletAddress?: string }) {
   const pathname = usePathname();

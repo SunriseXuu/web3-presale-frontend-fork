@@ -1,22 +1,17 @@
 import Image from "next/image";
 
-import ProductCard from "@/components/ProductCard";
+import ProductCard from "@/components/cards/ProductCard";
 import { getProducts } from "@/action/products.action";
-
-const products = [
-  { id: 1, name: "Shampoo", price: 9.99, img: "/shampoo.png" },
-  { id: 2, name: "Conditioner", price: 12.5, img: "/conditioner.png" },
-  { id: 3, name: "Lotion", price: 15.0, img: "/lotion.png" },
-  { id: 4, name: "Sunscreen", price: 20.0, img: "/sunscreen.png" },
-  { id: 5, name: "Cleanser", price: 8.0, img: "/cleanser.png" },
-  { id: 6, name: "Face Mask", price: 5.5, img: "/facemask.png" },
-  { id: 7, name: "Lip Balm", price: 3.0, img: "/lipbalm.png" },
-  { id: 8, name: "Body Lotion", price: 18.0, img: "/bodylotion.png" },
-];
+import { LAMPORTS } from "@/lib/constants";
 
 export default async function page() {
   const { data: productsData } = await getProducts();
-  console.log("Products Data:", productsData);
+  console.log("Products Data:", productsData.products);
+
+  const products = ((productsData.products as any[]) || []).map((product) => ({
+    ...product,
+    price: product.price / LAMPORTS,
+  }));
 
   return (
     <div className="min-h-screen flex flex-col pb-6 gap-6">

@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
-import { loginWithSolana } from "@/lib/utils/solana_auth";
+import { loginWithSolana } from "@/lib/tools/solana_auth";
 
 export default function ConnectButton({ walletAddress }: { walletAddress?: string }) {
   const [loading, setLoading] = useState<boolean>(false);
