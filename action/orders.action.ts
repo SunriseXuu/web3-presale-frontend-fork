@@ -19,39 +19,19 @@ export const getOrderById = async (id: string) =>
   });
 
 // 创建新 order
-export const createOrder = async (
-  reqBody: {
-    product_id: string;
-    quantity: number;
-    shopping_info: {
-      name: string;
-      phone: string;
-      address: string;
-    };
-  },
-  pathname: string
-) =>
+export const createOrder = async (reqBody: {
+  product_id: string;
+  quantity: number;
+  shopping_info?: {
+    name: string;
+    phone: string;
+    address: string;
+  };
+}) =>
   await requestHandler({
     endPoint: "/orders",
     method: "POST",
     reqBody,
-    pathname,
-  });
-
-// 确认支付 Order
-export const confirmOrderPayment = async (
-  reqBody: {
-    order_id: string;
-    tx_signature: string;
-    amount: bigint;
-  },
-  pathname: string
-) =>
-  await requestHandler({
-    endPoint: "/orders/:id/confirm-payment",
-    method: "POST",
-    reqBody,
-    pathname,
   });
 
 // 取消 Order

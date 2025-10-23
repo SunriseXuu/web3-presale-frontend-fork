@@ -2,15 +2,19 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 
 import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
+import { createOrder } from "@/action/orders.action";
 
 export default function ProductCard({
+  id,
   name,
   description,
   price,
   images,
 }: {
+  id: string;
   name: string;
   description: string;
   price: number;
@@ -20,11 +24,17 @@ export default function ProductCard({
   const [currency, setCurrency] = useState<string>("USDC");
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
+  const router = useRouter();
+
   // 处理购买逻辑
   async function handlePurchase() {
-    // try {
-    // } catch (error) {}
-    setDrawerOpen(false);
+    const { success, error } = await createOrder({ product_id: id, quantity });
+    if (!success) alert(error?.message || "Failed to create order");
+
+    if (success) {
+      setDrawerOpen(false);
+      router.push(`/orders?status=pending`);
+    }
   }
 
   return (

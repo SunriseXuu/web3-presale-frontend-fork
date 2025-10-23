@@ -77,7 +77,14 @@ export default async function requestHandler({
       "response" in error &&
       (error as { response?: unknown }).response
     )
-      return (error as { response: { data: ResponseType } }).response.data;
+      return {
+        id: "",
+        success: false,
+        data: { message: "Request failed" },
+        error: {
+          message: (error as { response: { data: { message?: string } } }).response.data.message,
+        },
+      };
 
     return {
       id: "",

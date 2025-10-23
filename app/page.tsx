@@ -5,9 +5,7 @@ import { getProducts } from "@/action/products.action";
 import { USD_DECIMALS } from "@/lib/constants";
 
 export default async function page() {
-  const { data: productsData } = await getProducts();
-  console.log("Products Data:", productsData.products);
-
+  const { data: productsData } = await getProducts({ status: "active" });
   const products = ((productsData.products as any[]) || []).map((product) => ({
     ...product,
     price: product.price / USD_DECIMALS,
