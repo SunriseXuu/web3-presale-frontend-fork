@@ -1,25 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import OrderCard, { OrderType } from "@/components/cards/OrderCard";
 import { getOrders } from "@/action/orders.action";
 import { orderStatusMap } from "@/lib/constants";
-
-type Order = {
-  order_id: string;
-  created_at: string;
-  // 可根据实际接口补充更多字段
-};
 
 export default async function page({ searchParams }: { searchParams: Promise<{ page: string; status: string }> }) {
   const query = await searchParams;
 
   const { data: ordersData } = await getOrders(query.status ? { status: query.status } : {});
-  const orders: Order[] = (ordersData.orders as Order[]) || [];
-
-  // console.log(orders);
+  const orders = (ordersData.orders as OrderType[]) || [];
 
   return (
-    <div className="min-h-screen flex flex-col pb-6 gap-6">
+    <div className="min-h-screen flex flex-col pb-12 gap-6">
       <section className="h-16 flex justify-between items-end bg-primary px-4 pb-2">
         <Link href="/me">
           <Image
@@ -52,17 +45,7 @@ export default async function page({ searchParams }: { searchParams: Promise<{ p
         {orders.length === 0 ? (
           <p className="text-center text-neutral-500 py-6">No orders found.</p>
         ) : (
-          orders.map((order) => (
-            <div
-              key={order.order_id}
-              className="flex flex-col bg-surface rounded-xl p-4 gap-2 border border-neutral-800"
-            >
-              <div className="flex justify-between items-center">
-                <p className="font-medium">Order ID: {order.order_id}</p>
-                <p className="text-sm text-neutral-500">{new Date(order.created_at).toLocaleDateString()}</p>
-              </div>
-            </div>
-          ))
+          orders.map((order) => <OrderCard key={order.order_id} {...order} />)
         )}
       </section>
     </div>

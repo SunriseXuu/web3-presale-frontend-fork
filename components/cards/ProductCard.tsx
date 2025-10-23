@@ -29,9 +29,11 @@ export default function ProductCard({
   // 处理购买逻辑
   async function handlePurchase() {
     const { success, error } = await createOrder({ product_id: id, quantity });
-    if (!success) alert(error?.message || "Failed to create order");
 
-    if (success) {
+    if (!success) {
+      if (error?.message) alert(error.message);
+      else if (confirm("Please connect your wallet first.")) router.push("/me");
+    } else {
       setDrawerOpen(false);
       router.push(`/orders?status=pending`);
     }

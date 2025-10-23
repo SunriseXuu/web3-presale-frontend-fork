@@ -10,7 +10,6 @@ type Product = {
   description: string;
   price: number;
   images: string[];
-  // 可根据实际接口补充更多字段
 };
 
 export default async function page() {
@@ -25,7 +24,7 @@ export default async function page() {
       <section className="relative h-48 overflow-hidden">
         <Image
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-auto object-cover z-0"
-          src="/cover.png"
+          src="/cover.jpg"
           alt="Cover"
           width={450}
           height={300}
@@ -34,7 +33,7 @@ export default async function page() {
 
         <div className="absolute inset-x-4 bottom-4 flex flex-col gap-2">
           <h1 className="text-2xl font-bold leading-tight drop-shadow">
-            The Only Web3 Presale Platform You&apos;ll Ever Need
+            MyShop - The Only Web3 Presale Platform You Need
           </h1>
         </div>
       </section>

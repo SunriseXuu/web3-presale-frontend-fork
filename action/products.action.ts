@@ -5,8 +5,8 @@ import requestHandler from "@/lib/tools/request";
 // 获取所有 products 列表
 export const getProducts = async (query?: {
   status?: string;
-  min_price?: bigint;
-  max_price?: bigint;
+  min_price?: number;
+  max_price?: number;
   sort?: string;
   order?: "asc" | "desc";
   page?: number;

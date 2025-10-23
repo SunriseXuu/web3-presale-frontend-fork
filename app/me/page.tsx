@@ -13,16 +13,10 @@ export default async function page() {
   return (
     <div className="min-h-screen flex flex-col pb-6 gap-6">
       <section>
-        <Image className="w-full h-32 object-cover z-0" src="/me-cover.jpg" alt="MeCover" width={450} height={300} />
+        <Image className="w-full h-32 object-cover z-0" src="/me-cover.png" alt="MeCover" width={450} height={300} />
 
-        <div className="flex items-center -mt-3 px-4 gap-6">
-          <Image
-            className="w-20 h-20 rounded-full"
-            src="/avatar.jpg"
-            alt="Avatar"
-            width={80}
-            height={80}
-          />
+        <div className="flex items-center -mt-1 px-4 gap-6">
+          <Image className="w-20 h-20 rounded-full" src="/avatar.jpg" alt="Avatar" width={80} height={80} />
           <ConnectButton walletAddress={user?.wallet_address} />
         </div>
       </section>

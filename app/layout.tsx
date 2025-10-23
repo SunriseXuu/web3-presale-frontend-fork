@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import "@solana/wallet-adapter-react-ui/styles.css";
+
 import AppTabbar from "@/components/shared/AppTabbar";
 
 export const metadata: Metadata = {
-  title: "Web3 商品预售",
-  description: "Solana + USDC 商品预售页面",
+  title: "MyShop - Web3 Presale",
+  description: "MyShop is the only Web3 presale platform you'll ever need for exclusive products.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
