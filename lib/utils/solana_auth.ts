@@ -51,7 +51,7 @@ export async function loginWithSolana(pathname: string) {
 }
 
 // 登出
-export async function logout() {
-  await logoutUser();
+export async function logout(pathname: string) {
+  await logoutUser(pathname);
   window.solana?.disconnect();
 }

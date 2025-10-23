@@ -7,6 +7,8 @@ import { usePathname } from "next/navigation";
 export default function AppTabbar() {
   const pathname = usePathname();
 
+  if (!["/", "/me"].includes(pathname)) return null;
+
   return (
     <>
       <footer className="max-w-[450px] min-w-[350px] h-[70px] fixed bottom-0 left-0 right-0 select-none mx-auto z-40">

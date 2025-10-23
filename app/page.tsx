@@ -1,9 +1,6 @@
 import Image from "next/image";
 
 import ProductCard from "@/components/ProductCard";
-import ProcessCard from "@/components/ProcessCard";
-import FaqCard from "@/components/FaqCard";
-
 import { getProducts } from "@/action/products.action";
 
 const products = [
@@ -17,38 +14,13 @@ const products = [
   { id: 8, name: "Body Lotion", price: 18.0, img: "/bodylotion.png" },
 ];
 
-const processSteps = [
-  { process: 1, content: "Connect your favorite Solana wallet, such as Phantom." },
-  { process: 2, content: "Browse and select products you like from the gallery." },
-  { process: 3, content: "Complete your purchase using USDC." },
-  { process: 4, content: "Enjoy your products delivered to your doorstep!" },
-];
-
-const faqs = [
-  {
-    id: 1,
-    question: "What payment methods are accepted?",
-    answer: "We accept payments in USDC via Solana wallets.",
-  },
-  {
-    id: 2,
-    question: "How do I connect my wallet?",
-    answer: "Click on the Connect Wallet button in Account page and follow the instructions.",
-  },
-  {
-    id: 3,
-    question: "When will I receive my products?",
-    answer: "Products will be shipped within 5-7 business days after purchase.",
-  },
-];
-
 export default async function page() {
   const { data: productsData } = await getProducts();
   console.log("Products Data:", productsData);
 
   return (
-    <div className="min-h-screen flex flex-col pb-4 gap-6">
-      <section className="relative h-64 overflow-hidden">
+    <div className="min-h-screen flex flex-col pb-6 gap-6">
+      <section className="relative h-48 overflow-hidden">
         <Image
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-auto object-cover z-0"
           src="/cover.png"
@@ -71,24 +43,6 @@ export default async function page() {
         <div className="grid grid-cols-2 gap-3">
           {products.map((product) => (
             <ProductCard key={product.id} {...product} />
-          ))}
-        </div>
-      </section>
-
-      <section className="flex flex-col px-4 gap-4">
-        <h1 className="text-2xl font-bold">Purchase Process</h1>
-
-        {processSteps.map((step) => (
-          <ProcessCard key={step.process} {...step} />
-        ))}
-      </section>
-
-      <section className="flex flex-col px-4 gap-4">
-        <h1 className="text-2xl font-bold">FAQs</h1>
-
-        <div className="flex flex-col gap-4">
-          {faqs.map((faq) => (
-            <FaqCard key={faq.id} {...faq} />
           ))}
         </div>
       </section>
