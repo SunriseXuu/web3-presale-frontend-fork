@@ -6,10 +6,6 @@ import axios from "axios";
 
 import { API_BASE_URL, AUTH_COOKIE } from "@/lib/constants";
 
-// type PagiType = {
-//   page?: number;
-//   pageSize?: number;
-// };
 type ResponseType = {
   id: string;
   success: boolean;

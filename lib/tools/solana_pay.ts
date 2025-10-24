@@ -1,24 +1,23 @@
 "use client";
 
 import { clusterApiUrl, PublicKey, Connection } from "@solana/web3.js";
-import { getAssociatedTokenAddress } from "@solana/spl-token";
+import { ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddress } from "@solana/spl-token";
 import { Program, AnchorProvider, utils, BN, setProvider } from "@coral-xyz/anchor";
 
 import idl from "@/lib/idl/presale_contract.json";
 import { USD_DECIMALS } from "@/lib/constants";
+import { SystemProgram } from "@solana/web3.js";
 
 export default async function payWithSolana({
+  orderId,
   productId,
   price,
   quantity,
-  paymentAddress,
-  paymentMint,
 }: {
+  orderId: string;
   productId: string;
-  price: number; // 单价（单位USDC）
+  price: number;
   quantity: number;
-  paymentAddress: string; // 平台方收款钱包地址（公钥字符串）
-  paymentMint: string; // USDC/USDT 的 mint 地址（公钥字符串）
 }) {
   const { solana } = window as any;
   if (!solana?.isPhantom) throw new Error("Please install the Phantom wallet extension");
@@ -36,27 +35,42 @@ export default async function payWithSolana({
   const programId = new PublicKey(idl.address);
   const program = new Program(idl, provider);
 
-  // 3. Derive PDA for config
+  // 3. 派生 PDA for config
   const [configPda] = PublicKey.findProgramAddressSync([Buffer.from("config")], programId);
 
-  // 4. 准备 token 相关账户
-  const tokenMint = new PublicKey(paymentMint);
+  // TODO: 临时硬编码 usdc 和平台钱包
+  const usdc = "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU";
+  const platformWallet = "AdmnrQJtt4vRN969ayudxfNDqiNa2AAQ1ErnUPTMYRgJ";
+
+  // 4. 账户准备
+  const tokenMint = new PublicKey(usdc);
+  const platformAuthority = new PublicKey(platformWallet);
   const buyerTokenAccount = await getAssociatedTokenAddress(tokenMint, buyer);
-  const platformTokenAccount = await getAssociatedTokenAddress(tokenMint, new PublicKey(paymentAddress));
+  const platformTokenAccount = await getAssociatedTokenAddress(tokenMint, platformAuthority);
 
-  // 5. 计算 price 和 quantity 的 BN 值（按 USDC 6位小数假设）
-  const priceBn = new BN(price * USD_DECIMALS);
-  const qtyBn = new BN(quantity);
+  // 检查买家 token 账户是否存在
+  const buyerTokenAccountInfoRaw = await connection.getAccountInfo(buyerTokenAccount);
+  if (!buyerTokenAccountInfoRaw) throw new Error("Buyer USDC token account does not exist");
 
-  // 6. 调用 purchase 指令
+  // 检查买家 USDC/USDT 余额是否足够
+  const buyerTokenAccountInfo = await connection.getTokenAccountBalance(buyerTokenAccount);
+  const totalPrice = price * quantity;
+  const buyerUsdcBalance = buyerTokenAccountInfo.value.uiAmount * USD_DECIMALS;
+  if (buyerUsdcBalance < totalPrice) throw new Error("Insufficient USDC balance");
+
+  // 5. 调用 purchase 指令
   const res = await program.methods
-    .purchase(productId, priceBn, qtyBn)
+    .purchase(orderId, productId, new BN(price), new BN(quantity))
     .accounts({
-      buyer,
+      buyer: buyer,
       config: configPda,
-      buyerTokenAccount,
-      platformTokenAccount,
+      buyerTokenAccount: buyerTokenAccount,
+      mint: tokenMint,
+      platformAuthority: platformAuthority,
+      platformTokenAccount: platformTokenAccount,
       tokenProgram: utils.token.TOKEN_PROGRAM_ID,
+      associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+      systemProgram: SystemProgram.programId,
     })
     .rpc();
 

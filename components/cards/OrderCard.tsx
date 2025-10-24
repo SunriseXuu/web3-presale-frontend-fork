@@ -34,11 +34,10 @@ export default function OrderCard({
   // 对 pending 状态的订单，添加一个“立即支付”按钮的处理函数占位符
   async function handlePayNow() {
     await payWithSolana({
+      orderId: order_id,
       productId: product_id,
       price: product_snapshot.price,
       quantity,
-      paymentAddress: product_snapshot.payment_address,
-      paymentMint: "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
     });
   }
 
