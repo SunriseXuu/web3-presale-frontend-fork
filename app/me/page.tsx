@@ -4,12 +4,9 @@ import Link from "next/link";
 import ConnectButton from "@/components/wallet/ConnectButton";
 import DisconnectButton from "@/components/wallet/DisconnectButton";
 
-import { getCurrentUser } from "@/action/users.action";
 import { orderEntry } from "@/lib/constants";
 
-export default async function page() {
-  const user = await getCurrentUser();
-
+export default function page() {
   return (
     <div className="min-h-screen flex flex-col pb-6 gap-6">
       <section>
@@ -17,7 +14,7 @@ export default async function page() {
 
         <div className="flex items-center -mt-1 px-4 gap-6">
           <Image className="w-20 h-20 rounded-full" src="/avatar.jpg" alt="Avatar" width={80} height={80} />
-          <ConnectButton walletAddress={user?.wallet_address} />
+          <ConnectButton />
         </div>
       </section>
 
@@ -59,7 +56,7 @@ export default async function page() {
       </section>
 
       <section className="px-4">
-        <DisconnectButton walletAddress={user?.wallet_address} />
+        <DisconnectButton />
       </section>
     </div>
   );

@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
+import { getCurrentUser } from "@/action/users.action";
 import { loginWithSolana } from "@/lib/tools/solana_auth";
 
-export default function ConnectButton({ walletAddress }: { walletAddress?: string }) {
+export default function ConnectButton() {
+  const [walletAddress, setWalletAddress] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const pathname = usePathname();
@@ -22,6 +24,16 @@ export default function ConnectButton({ walletAddress }: { walletAddress?: strin
       setLoading(false);
     }
   }
+
+  // 获取当前登录用户信息
+  useEffect(() => {
+    async function fetchUser() {
+      const user = await getCurrentUser();
+      if (user) setWalletAddress(user.wallet_address);
+    }
+
+    fetchUser();
+  }, []);
 
   if (walletAddress)
     return (

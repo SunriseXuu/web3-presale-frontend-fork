@@ -1,10 +1,8 @@
-"use server";
+"use client";
 
-import { cookies } from "next/headers";
-import { revalidatePath } from "next/cache";
 import axios from "axios";
 
-import { API_BASE_URL, AUTH_COOKIE } from "@/lib/constants";
+import { API_BASE_URL, AUTH_STORE } from "@/lib/constants";
 
 type ResponseType = {
   id: string;
@@ -25,17 +23,15 @@ export default async function requestHandler({
   params,
   query,
   reqBody,
-  pathname,
 }: {
   endPoint: string;
   method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   params?: Record<string, string | number>;
   query?: Record<string, string | number>;
   reqBody?: Record<string, unknown>;
-  pathname?: string;
 }): Promise<ResponseType> {
   try {
-    const token = (await cookies()).get(AUTH_COOKIE)?.value;
+    const token = localStorage.getItem(AUTH_STORE);
 
     // 处理 params
     let url = `${API_BASE_URL}${endPoint}`;
@@ -60,9 +56,6 @@ export default async function requestHandler({
       headers: { Authorization: token ? `Bearer ${token}` : "" },
       data: reqBody,
     });
-
-    // 如果提供了pathname，则重新验证该路径
-    if (pathname) revalidatePath(pathname);
 
     return data;
   } catch (error: unknown) {

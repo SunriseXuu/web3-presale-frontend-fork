@@ -1,15 +1,29 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 import OrderCard, { OrderType } from "@/components/cards/OrderCard";
 import { getOrders } from "@/action/orders.action";
 import { orderStatusMap } from "@/lib/constants";
 
-export default async function page({ searchParams }: { searchParams: Promise<{ page: string; status: string }> }) {
-  const query = await searchParams;
+export default function page() {
+  const [orders, setOrders] = useState<OrderType[]>([]);
 
-  const { data: ordersData } = await getOrders(query.status ? { status: query.status } : {});
-  const orders = (ordersData.orders as OrderType[]) || [];
+  // 解析 URL 查询参数
+  const searchParams = useSearchParams();
+  const status = searchParams.get("status");
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const { data: ordersData } = await getOrders(status ? { status } : {});
+      setOrders((ordersData.orders as OrderType[]) || []);
+    };
+
+    fetchOrders();
+  }, [status]);
 
   return (
     <div className="min-h-screen flex flex-col pb-12 gap-6">
@@ -33,7 +47,7 @@ export default async function page({ searchParams }: { searchParams: Promise<{ p
             key={item.value || "all"}
             href={item.value ? `/orders?status=${item.value}` : "/orders"}
             className={`${
-              query.status === item.value || (!query.status && item.value === "") ? "bg-primary" : "bg-neutral"
+              status === item.value || (!status && item.value === "") ? "bg-primary" : "bg-neutral"
             } text-sm rounded-sm px-2.5 py-0.5`}
           >
             {item.label}

@@ -27,12 +27,12 @@ export async function loginWithSolana(pathname: string) {
   // const signature = Buffer.from(signed.signature).toString("base64"); // 使用 base64 编码签名
 
   // 4. 登录
-  const { success: loginSuccess } = await loginUser({ wallet_address: walletAddress, signature }, pathname);
+  const { success: loginSuccess } = await loginUser({ wallet_address: walletAddress, signature });
   if (!loginSuccess) throw new Error("Failed to log in");
 }
 
 // 登出
-export async function logout(pathname: string) {
-  await logoutUser(pathname);
+export async function logout() {
+  await logoutUser();
   (window as any).solana?.disconnect();
 }

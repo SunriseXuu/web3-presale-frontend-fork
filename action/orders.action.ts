@@ -1,4 +1,4 @@
-"use server";
+"use client"; // 由于要静态处理，这里只是仿照action的写法
 
 import requestHandler from "@/lib/tools/request";
 
@@ -35,17 +35,10 @@ export const createOrder = async (reqBody: {
   });
 
 // 取消 Order
-export const cancelOrder = async (
-  id: string,
-  reqBody: {
-    reason: string;
-  },
-  pathname: string
-) =>
+export const cancelOrder = async (id: string, reqBody: { reason: string }) =>
   await requestHandler({
     endPoint: "/orders/:order_id/cancel",
     method: "PUT",
     params: { order_id: id },
     reqBody,
-    pathname,
   });
