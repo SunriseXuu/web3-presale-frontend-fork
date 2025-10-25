@@ -1,5 +1,3 @@
-"use client";
-
 import axios from "axios";
 
 import { AUTH_STORE } from "@/lib/constants";
@@ -15,7 +13,7 @@ type ResponseType = {
   error: { code?: string; message?: string } | null;
 };
 
-export default async function requestHandler({
+const requestHandler = async ({
   endPoint,
   method,
   params,
@@ -27,7 +25,7 @@ export default async function requestHandler({
   params?: Record<string, string | number>;
   query?: Record<string, string | number>;
   reqBody?: Record<string, unknown>;
-}): Promise<ResponseType> {
+}): Promise<ResponseType> => {
   try {
     const token = localStorage.getItem(AUTH_STORE);
     let url = `/api/v1/${endPoint}`;
@@ -80,4 +78,6 @@ export default async function requestHandler({
       error: { message: typeof error === "string" ? error : undefined },
     };
   }
-}
+};
+
+export default requestHandler;

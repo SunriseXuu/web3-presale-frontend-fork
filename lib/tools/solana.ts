@@ -1,14 +1,45 @@
-"use client";
-
+import bs58 from "bs58";
+import { SystemProgram } from "@solana/web3.js";
 import { clusterApiUrl, PublicKey, Connection } from "@solana/web3.js";
 import { ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddress } from "@solana/spl-token";
 import { Program, AnchorProvider, utils, BN, setProvider } from "@coral-xyz/anchor";
 
+import { getUserNonce, loginUser, logoutUser } from "@/action/users.action";
+
 import idl from "@/lib/idl/presale_contract.json";
 import { USD_DECIMALS } from "@/lib/constants";
-import { SystemProgram } from "@solana/web3.js";
 
-export default async function payWithSolana({
+// 核心登录流程
+export const loginWithSolana = async () => {
+  const { solana } = window as any;
+  if (!solana?.isPhantom) throw new Error("Please install the Phantom wallet extension.");
+
+  // 1. 连接钱包
+  const { publicKey } = await solana.connect();
+  const walletAddress = publicKey.toString();
+
+  // 2. 获取 nonce 和 message
+  const { data: nonceRes, success: nonceSuccess } = await getUserNonce({
+    wallet_address: walletAddress,
+  });
+  if (!nonceSuccess) throw new Error("Failed to get nonce.");
+  const message = nonceRes.message;
+
+  // 3. 签名消息
+  const encoded = new TextEncoder().encode(message);
+  const signed = await solana.signMessage(encoded, "utf8");
+  const signature = bs58.encode(signed.signature); // 使用 base58 编码签名
+  // const signature = Buffer.from(signed.signature).toString("base64"); // 使用 base64 编码签名
+
+  // 4. 登录
+  const { data, success: loginSuccess } = await loginUser({ wallet_address: walletAddress, signature });
+  if (!loginSuccess) throw new Error("Failed to log in.");
+
+  return data.user;
+};
+
+// 使用 Solana 钱包支付订单
+export const payWithSolana = async ({
   orderId,
   productId,
   price,
@@ -18,9 +49,9 @@ export default async function payWithSolana({
   productId: string;
   price: number;
   quantity: number;
-}) {
+}) => {
   const { solana } = window as any;
-  if (!solana?.isPhantom) throw new Error("Please install the Phantom wallet extension");
+  if (!solana?.isPhantom) throw new Error("Please install the Phantom wallet extension.");
 
   // 请求连接钱包
   const resp = await solana.connect();
@@ -50,16 +81,16 @@ export default async function payWithSolana({
 
   // 检查买家 token 账户是否存在
   const buyerTokenAccountInfoRaw = await connection.getAccountInfo(buyerTokenAccount);
-  if (!buyerTokenAccountInfoRaw) throw new Error("Buyer USDC token account does not exist");
+  if (!buyerTokenAccountInfoRaw) throw new Error("Buyer USDC token account does not exist.");
 
   // 检查买家 USDC/USDT 余额是否足够
   const buyerTokenAccountInfo = await connection.getTokenAccountBalance(buyerTokenAccount);
   const totalPrice = price * quantity;
   const buyerUsdcBalance = buyerTokenAccountInfo.value.uiAmount * USD_DECIMALS;
-  if (buyerUsdcBalance < totalPrice) throw new Error("Insufficient USDC balance");
+  if (buyerUsdcBalance < totalPrice) throw new Error("Insufficient USDC balance.");
 
   // 5. 调用 purchase 指令
-  const res = await program.methods
+  const txHash = await program.methods
     .purchase(orderId, productId, new BN(price), new BN(quantity))
     .accounts({
       buyer: buyer,
@@ -74,5 +105,11 @@ export default async function payWithSolana({
     })
     .rpc();
 
-  console.log("✅ Transaction signature:", res);
-}
+  return txHash;
+};
+
+// 登出
+export const logout = () => {
+  logoutUser();
+  (window as any).solana?.disconnect();
+};

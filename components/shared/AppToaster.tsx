@@ -6,7 +6,7 @@ export default function AppToaster() {
       toastOptions={{
         style: {
           maxWidth: "75%",
-          backgroundColor: "#484848",
+          backgroundColor: "#a259ff",
           color: "white",
           fontSize: "14px",
           padding: "6px 12px",

@@ -77,11 +77,15 @@ export default function HomePage() {
           ))}
         </div>
 
-        <AppPlaceholder text="Loading more products..." mode="loading" isShow={isFetching} />
+        <AppPlaceholder
+          text={products.length > 0 ? "Loading more products..." : "Loading products..."}
+          mode="loading"
+          isShow={isFetching}
+        />
         <AppPlaceholder
           text="No more products to load"
           mode="normal"
-          isShow={products.length === 0 && currPage > totalPageRef.current && !isFetching}
+          isShow={products.length > 0 && currPage > totalPageRef.current && !isFetching}
         />
         <AppPlaceholder text="No products found" mode="normal" isShow={products.length === 0 && !isFetching} />
       </section>

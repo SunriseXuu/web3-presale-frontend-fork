@@ -5,11 +5,11 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 import { getCurrentUser } from "@/action/users.action";
-import { loginWithSolana, logout } from "@/lib/tools/solana_auth";
+import { loginWithSolana, logout } from "@/lib/tools/solana";
 
 export default function ToggleConnection() {
   const [walletAddress, setWalletAddress] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [isBtnLoading, setIsBtnLoading] = useState<boolean>(false);
 
   // 获取当前登录用户信息
   const fetchUser = async () => {
@@ -21,20 +21,27 @@ export default function ToggleConnection() {
 
   // 处理登录
   const handleLogin = async () => {
+    setIsBtnLoading(true);
+
     try {
-      setLoading(true);
-      await loginWithSolana();
-    } catch (e) {
-      toast.error((e as Error).message);
-    } finally {
-      setLoading(false);
-      await fetchUser();
+      const user = await loginWithSolana();
+
+      const wltAddr = (user as { wallet_address: string }).wallet_address;
+      setWalletAddress(wltAddr);
+
+      toast.success("Wallet connected.");
+    } catch (err: unknown) {
+      toast.error((err as Error).message);
     }
+
+    setIsBtnLoading(false);
   };
 
   // 处理登出
   const handleLogout = async () => {
     await logout();
+    toast.success("Wallet disconnected.");
+
     await fetchUser();
   };
 
@@ -67,12 +74,13 @@ export default function ToggleConnection() {
   // 未连接则显示连接按钮
   return (
     <button
-      className="w-full bg-primary disabled:bg-primary/25 font-semibold rounded-xl select-none cursor-pointer py-2.5"
+      className="w-full flex justify-center items-center bg-primary disabled:bg-primary/25 font-semibold rounded-xl select-none cursor-pointer py-2.5 gap-2"
       type="button"
-      disabled={loading}
+      disabled={isBtnLoading}
       onClick={handleLogin}
     >
-      {loading ? "Connecting..." : "Connect Wallet"}
+      {isBtnLoading && <img className="animate-spin" src="/loading.svg" alt="Loading" width={16} height={16} />}
+      <span>{isBtnLoading ? "Connecting..." : "Connect Wallet"}</span>
     </button>
   );
 }

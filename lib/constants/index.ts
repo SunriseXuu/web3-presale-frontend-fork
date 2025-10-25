@@ -13,24 +13,21 @@ export const orderEntry = [
     icon: "/pending-payment.svg",
     alt: "PENDING",
     label: "Pending",
+    size: 31,
   },
   {
     href: "/orders?status=paid",
     icon: "/paid.svg",
     alt: "PAID",
     label: "Paid",
+    size: 30,
   },
   {
     href: "/orders?status=cancelled",
     icon: "/cancelled.svg",
     alt: "CANCELLED",
     label: "Cancelled",
-  },
-  {
-    href: "/orders?status=refund",
-    icon: "/refund.svg",
-    alt: "Refund",
-    label: "Refund",
+    size: 27,
   },
 ];
 

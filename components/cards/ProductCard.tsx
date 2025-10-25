@@ -4,8 +4,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
+import { OrderType } from "@/components/cards/OrderCard";
 import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
+
 import { createOrder } from "@/action/orders.action";
+
+import { payWithSolana } from "@/lib/tools/solana";
 import { USD_DECIMALS } from "@/lib/constants";
 
 export type ProductType = {
@@ -19,24 +23,46 @@ export type ProductType = {
 export default function ProductCard({ id, name, description, price, images }: ProductType) {
   const [quantity, setQuantity] = useState<number>(1);
   const [currency, setCurrency] = useState<string>("USDC");
-  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+  const [isBtnLoading, setIsBtnLoading] = useState<boolean>(false);
 
   const router = useRouter();
 
   // 处理购买逻辑
-  async function handlePurchase() {
-    const { success, error } = await createOrder({ product_id: id, quantity });
+  const handlePurchase = async () => {
+    setIsBtnLoading(true);
 
+    const { data: order, success, error } = await createOrder({ product_id: id, quantity });
     if (!success) {
       if (error?.message) toast.error(error.message);
       else {
         toast.error("Please connect your wallet first.");
         router.push("/me");
       }
-    } else {
-      setDrawerOpen(false);
+
+      return;
     }
-  }
+
+    try {
+      await payWithSolana({
+        orderId: (order as OrderType).order_id,
+        productId: (order as OrderType).product_id,
+        price: (order as OrderType).product_snapshot.price,
+        quantity,
+      });
+      toast.success("Product purchased. Check out your order page later.");
+    } catch (err: unknown) {
+      const errMsg = (err as Error).message;
+
+      if (errMsg.includes("Simulation failed")) toast.error("This transaction has already been processed.");
+      else if (errMsg.includes("User rejected the request."))
+        toast.error("Order placed but request rejected. Complete the payment in your order page later.");
+      else toast.error((err as Error).message);
+    }
+
+    setIsDrawerOpen(false);
+    setIsBtnLoading(false);
+  };
 
   return (
     <>
@@ -45,7 +71,7 @@ export default function ProductCard({ id, name, description, price, images }: Pr
           className={`w-full aspect-[1] object-cover cursor-pointer ${!images[0] ? " object-contain! p-16!" : ""}`}
           src={images[0] || "/no-img.svg"}
           alt={name}
-          onClick={() => setDrawerOpen(true)}
+          onClick={() => setIsDrawerOpen(true)}
           onError={(e) => {
             const img = e.currentTarget as HTMLImageElement;
             img.src = "/no-img.svg";
@@ -55,9 +81,11 @@ export default function ProductCard({ id, name, description, price, images }: Pr
         />
 
         <div className="flex flex-col items-center px-2 pb-3 gap-3">
-          <h3 className="text-sm font-medium line-clamp-1">{name}</h3>
+          <h3 className="text-sm font-medium cursor-pointer line-clamp-1" onClick={() => setIsDrawerOpen(true)}>
+            {name}
+          </h3>
 
-          <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+          <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
             <DrawerTrigger asChild>
               <button
                 className="w-36 h-7 flex justify-center items-center bg-primary rounded-lg cursor-pointer select-none outline-none gap-0.5"
@@ -164,16 +192,30 @@ export default function ProductCard({ id, name, description, price, images }: Pr
                 <p className="text-xs text-zinc-400 line-clamp-3">{description}</p>
 
                 <button
-                  className="w-full flex justify-center items-center bg-primary font-semibold rounded-lg cursor-pointer select-none py-2.5 gap-3"
+                  className="w-full flex justify-center items-center bg-primary disabled:bg-primary/25 font-semibold rounded-lg cursor-pointer select-none py-2.5 gap-3"
                   type="button"
+                  disabled={isBtnLoading}
                   onClick={handlePurchase}
                 >
-                  <span className="font-medium">Buy now</span>
-
-                  <span className="flex items-center gap-0.5">
-                    <img src={currency === "USDC" ? "/usdc.svg" : "/usdt.svg"} alt="CURRENCY" width={18} height={18} />
-                    <span className="font-medium">{((price * quantity) / USD_DECIMALS).toFixed(2)}</span>
-                  </span>
+                  {isBtnLoading && (
+                    <img className="animate-spin" src="/loading.svg" alt="Loading" width={16} height={16} />
+                  )}
+                  {isBtnLoading ? (
+                    "Purchasing..."
+                  ) : (
+                    <>
+                      <span className="font-medium">Buy Now</span>
+                      <span className="flex items-center gap-0.5">
+                        <img
+                          src={currency === "USDC" ? "/usdc.svg" : "/usdt.svg"}
+                          alt="CURRENCY"
+                          width={18}
+                          height={18}
+                        />
+                        <span className="font-medium">{((price * quantity) / USD_DECIMALS).toFixed(2)}</span>
+                      </span>
+                    </>
+                  )}
                 </button>
               </div>
             </DrawerContent>

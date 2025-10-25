@@ -27,11 +27,11 @@ export default function page() {
           </Link>
         </div>
 
-        <div className="flex justify-between items-center bg-neutral rounded-xl px-8 py-5">
+        <div className="flex justify-between items-center bg-neutral rounded-xl px-10 py-5">
           {orderEntry.map((item) => (
-            <Link key={item.href} className="flex flex-col items-center gap-0.5 mt-0.5" href={item.href}>
-              <img src={item.icon} alt={item.alt} width={24} height={24} />
-              <span className="text-xs text-zinc-300">{item.label}</span>
+            <Link key={item.href} className="flex flex-col items-center gap-1 mt-1" href={item.href}>
+              <img src={item.icon} alt={item.alt} width={item.size} height={item.size} />
+              <span className="text-sm text-zinc-300">{item.label}</span>
             </Link>
           ))}
         </div>

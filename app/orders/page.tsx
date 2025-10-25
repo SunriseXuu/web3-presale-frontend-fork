@@ -69,10 +69,6 @@ function OrdersPageContent() {
     fetchFirstPageOrders();
   }, [status]);
 
-  useEffect(() => {
-    console.log("Status changed:", status);
-  }, []);
-
   // 监听页面触底，加载下一页
   useEffect(() => {
     const handleScroll = () => {
@@ -120,9 +116,13 @@ function OrdersPageContent() {
           <OrderCard key={order.order_id} {...order} />
         ))}
 
-        <AppPlaceholder text="Loading more products..." mode="loading" isShow={isFetching} />
         <AppPlaceholder
-          text="No more products to load"
+          text={orders.length > 0 ? "Loading more orders..." : "Loading orders..."}
+          mode="loading"
+          isShow={isFetching}
+        />
+        <AppPlaceholder
+          text="No more orders to load"
           mode="normal"
           isShow={orders.length > 0 && currPage > totalPageRef.current && !isFetching}
         />

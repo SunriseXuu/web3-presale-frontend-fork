@@ -3,9 +3,10 @@ import { AUTH_STORE, USER_STORE } from "@/lib/constants";
 
 // 获取当前登录用户信息
 export const getCurrentUser = async () => {
-  const userCookie = localStorage.getItem(USER_STORE);
-  if (!userCookie) return null;
-  return JSON.parse(decodeURIComponent(userCookie));
+  const userStore = localStorage.getItem(USER_STORE);
+
+  if (!userStore) return null;
+  return JSON.parse(decodeURIComponent(userStore));
 };
 
 // 获取用户 nonce - 检查用户是否存在，不存在则创建新用户，生成/返回nonce
@@ -24,7 +25,7 @@ export const loginUser = async (reqBody: { wallet_address: string; signature: st
     reqBody,
   });
 
-  // 如果有JWT和USER，则存储到cookie
+  // 如果有JWT和USER，则存储到本地存储
   if (typeof res.data.token === "string" && res.data.token && res.data.user) {
     localStorage.setItem(AUTH_STORE, res.data.token);
     localStorage.setItem(USER_STORE, encodeURIComponent(JSON.stringify(res.data.user)));
@@ -34,7 +35,7 @@ export const loginUser = async (reqBody: { wallet_address: string; signature: st
 };
 
 // 登出当前登录用户
-export async function logoutUser() {
+export const logoutUser = () => {
   localStorage.removeItem(AUTH_STORE);
   localStorage.removeItem(USER_STORE);
-}
+};
