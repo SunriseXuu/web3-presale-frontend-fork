@@ -7,11 +7,12 @@ export default function FaqCard({ id, question, answer }: { id: number; question
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="relative flex flex-col bg-neutral rounded-xl p-4 gap-2" onClick={() => setIsOpen(!isOpen)}>
+    <div
+      className="relative flex flex-col bg-neutral rounded-xl cursor-pointer p-4 gap-2"
+      onClick={() => setIsOpen(!isOpen)}
+    >
       <img
-        className={`w-5 h-5 absolute top-4 right-4 cursor-pointer transition-transform duration-200 ${
-          isOpen ? "rotate-90" : ""
-        }`}
+        className={`w-5 h-5 absolute top-4 right-4 transition-transform duration-200 ${isOpen ? "rotate-90" : ""}`}
         src="/chevron-r.svg"
         alt="ChevronR"
         width={20}

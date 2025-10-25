@@ -17,6 +17,7 @@ export default function HomePage() {
         ...product,
         price: product.price / USD_DECIMALS,
       }));
+      console.log(products);
       setProducts(products);
     };
 

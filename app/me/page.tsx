@@ -1,9 +1,7 @@
 // import Image from "next/image";
 import Link from "next/link";
 
-import ConnectButton from "@/components/wallet/ConnectButton";
-import DisconnectButton from "@/components/wallet/DisconnectButton";
-
+import ToggleConnection from "@/components/wallet/ToggleConnection";
 import { orderEntry } from "@/lib/constants";
 
 export default function page() {
@@ -14,7 +12,7 @@ export default function page() {
 
         <div className="flex items-center -mt-1 px-4 gap-6">
           <img className="w-20 h-20 rounded-full" src="/avatar.jpg" alt="Avatar" width={80} height={80} />
-          <ConnectButton />
+          <ToggleConnection />
         </div>
       </section>
 
@@ -48,15 +46,18 @@ export default function page() {
             <img className="w-4 h-4" src="/chevron-r.svg" alt="ChevronR" width={16} height={16} />
           </Link>
           <hr className="border-zinc-600" />
+
+          <Link className="flex justify-between items-center" href="/language">
+            <span className="text-sm">Language Settings</span>
+            <img className="w-4 h-4" src="/chevron-r.svg" alt="ChevronR" width={16} height={16} />
+          </Link>
+          <hr className="border-zinc-600" />
+
           <Link className="flex justify-between items-center" href="/help">
             <span className="text-sm">Help Center</span>
             <img className="w-4 h-4" src="/chevron-r.svg" alt="ChevronR" width={16} height={16} />
           </Link>
         </div>
-      </section>
-
-      <section className="px-4">
-        <DisconnectButton />
       </section>
     </div>
   );
