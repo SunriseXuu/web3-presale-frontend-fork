@@ -27,9 +27,7 @@ export default function CountdownTimer({ createdAt }: CountdownTimerProps) {
     return () => clearInterval(timer);
   }, [timeLeft]);
 
-  if (timeLeft <= 0) {
-    return <span className="text-xs text-red-500">Expired</span>;
-  }
+  if (timeLeft <= 0) return <span className="text-xs text-red-500">Cancelled</span>;
 
   return (
     <span className="text-xs text-orange-500">
