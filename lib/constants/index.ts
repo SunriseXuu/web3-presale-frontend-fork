@@ -36,7 +36,7 @@ export const orderEntry = [
 
 // 订单状态常量
 export const orderStatusMap = [
-  { label: "All", value: "" },
+  { label: "All", value: "all" },
   { label: "Pending", value: "pending" },
   { label: "Paid", value: "paid" },
   { label: "Cancelled", value: "cancelled" },

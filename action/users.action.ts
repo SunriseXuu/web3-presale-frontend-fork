@@ -1,5 +1,3 @@
-"use client"; // 由于要静态处理，这里只是仿照action的写法
-
 import requestHandler from "@/lib/tools/request";
 import { AUTH_STORE, USER_STORE } from "@/lib/constants";
 

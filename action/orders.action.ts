@@ -1,9 +1,7 @@
-"use client"; // 由于要静态处理，这里只是仿照action的写法
-
 import requestHandler from "@/lib/tools/request";
 
 // 获取登录用户所有 orders 列表
-export const getOrders = async (query?: { status?: string; page?: number; page_size?: number }) =>
+export const getOrders = async (query?: { status?: string; page?: number; limit?: number }) =>
   await requestHandler({
     endPoint: "/orders",
     method: "GET",

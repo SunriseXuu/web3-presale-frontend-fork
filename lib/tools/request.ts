@@ -9,12 +9,10 @@ type ResponseType = {
   success: boolean;
   data: {
     message?: string;
+    pagination?: { page: number; limit: number; total: number; total_pages: number };
     [key: string]: unknown;
   };
-  error: {
-    code?: string;
-    message?: string;
-  } | null;
+  error: { code?: string; message?: string } | null;
 };
 
 export default async function requestHandler({

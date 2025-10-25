@@ -1,24 +1,89 @@
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState, useRef, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+
 import OrderCard, { OrderType } from "@/components/cards/OrderCard";
+import AppPlaceholder from "@/components/shared/AppPlaceholder";
+
 import { getOrders } from "@/action/orders.action";
 import { orderStatusMap } from "@/lib/constants";
 
 function OrdersPageContent() {
   const [orders, setOrders] = useState<OrderType[]>([]);
+  const [currPage, setCurrPage] = useState<number>(1);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
+
+  const totalPageRef = useRef<number>(1);
+  const fetchedLatestPageRef = useRef<number>(0);
+
   const searchParams = useSearchParams();
   const status = searchParams.get("status");
 
+  // 拉取订单列表
+  const fetchOrders = async () => {
+    if (currPage > totalPageRef.current || currPage <= fetchedLatestPageRef.current || isFetching) return;
+    fetchedLatestPageRef.current = currPage; // 立即标记为已拉取过该页
+
+    setIsFetching(true);
+
+    const { data: ordersData } = await getOrders(
+      status ? { status, page: currPage, limit: 10 } : { page: currPage, limit: 10 }
+    );
+
+    const newOrders: OrderType[] = (ordersData.orders as OrderType[]) || [];
+    totalPageRef.current = ordersData.pagination?.total_pages || 1;
+
+    setIsFetching(false);
+
+    setOrders((prev) => [...prev, ...newOrders]);
+    setCurrPage((prev) => prev + 1);
+  };
+
+  // 拉取第一页订单列表
+  const fetchFirstPageOrders = async () => {
+    fetchedLatestPageRef.current = 1; // 立即标记为已拉取过该页
+    setIsFetching(true);
+
+    const { data: ordersData } = await getOrders(status ? { status, page: 1, limit: 10 } : { page: 1, limit: 10 });
+
+    const newOrders: OrderType[] = (ordersData.orders as OrderType[]) || [];
+    totalPageRef.current = ordersData.pagination?.total_pages || 1;
+
+    setIsFetching(false);
+
+    setOrders(newOrders);
+    setCurrPage(2);
+  };
+
   useEffect(() => {
-    const fetchOrders = async () => {
-      const { data: ordersData } = await getOrders(status ? { status } : {});
-      setOrders((ordersData.orders as OrderType[]) || []);
-    };
-    fetchOrders();
+    // 初始化拉取数据
+    setOrders([]);
+    setCurrPage(1);
+    setIsFetching(false);
+    totalPageRef.current = 1;
+    fetchedLatestPageRef.current = 0;
+
+    // 组件加载时拉取订单列表
+    fetchFirstPageOrders();
   }, [status]);
+
+  useEffect(() => {
+    console.log("Status changed:", status);
+  }, []);
+
+  // 监听页面触底，加载下一页
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 70) fetchOrders();
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [status, currPage]);
 
   return (
     <div className="min-h-screen flex flex-col pb-12 gap-6">
@@ -39,10 +104,10 @@ function OrdersPageContent() {
       <div className="flex items-center px-4 gap-2">
         {orderStatusMap.map((item) => (
           <Link
-            key={item.value || "all"}
-            href={item.value ? `/orders?status=${item.value}` : "/orders"}
-            className={`$${
-              status === item.value || (!status && item.value === "") ? "bg-primary" : "bg-neutral"
+            key={item.value}
+            href={item.value !== "all" ? `/orders?status=${item.value}` : "/orders"}
+            className={`${
+              status === item.value || (!status && item.value === "all") ? "bg-primary" : "bg-neutral"
             } text-sm rounded-sm px-2.5 py-0.5`}
           >
             {item.label}
@@ -51,11 +116,17 @@ function OrdersPageContent() {
       </div>
 
       <section className="flex flex-col px-4 gap-4">
-        {orders.length === 0 ? (
-          <p className="text-center text-neutral-500 py-6">No orders found.</p>
-        ) : (
-          orders.map((order) => <OrderCard key={order.order_id} {...order} />)
-        )}
+        {orders.map((order) => (
+          <OrderCard key={order.order_id} {...order} />
+        ))}
+
+        <AppPlaceholder text="Loading more products..." mode="loading" isShow={isFetching} />
+        <AppPlaceholder
+          text="No more products to load"
+          mode="normal"
+          isShow={orders.length > 0 && currPage > totalPageRef.current && !isFetching}
+        />
+        <AppPlaceholder text="No orders found" mode="normal" isShow={orders.length === 0 && !isFetching} />
       </section>
     </div>
   );

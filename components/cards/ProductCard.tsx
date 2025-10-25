@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { createOrder } from "@/action/orders.action";
+import { USD_DECIMALS } from "@/lib/constants";
 
 export type ProductType = {
   id: string;
@@ -20,8 +21,6 @@ export default function ProductCard({ id, name, description, price, images }: Pr
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   const router = useRouter();
-
-  console.log(images);
 
   // 处理购买逻辑
   async function handlePurchase() {
@@ -39,19 +38,26 @@ export default function ProductCard({ id, name, description, price, images }: Pr
   return (
     <>
       <div className="flex flex-col items-center bg-neutral rounded-xl overflow-hidden gap-2">
-        <img className="w-full object-cover" src={"/shampoo.png"} alt={name} width={96} height={96} />
+        <img
+          className="w-full aspect-[1] object-cover cursor-pointer"
+          src={images[0]}
+          alt={name}
+          width={96}
+          height={96}
+          onClick={() => setDrawerOpen(true)}
+        />
 
-        <div className="flex flex-col items-center px-3 pb-4 gap-2">
-          <h3 className="font-medium">{name}</h3>
+        <div className="flex flex-col items-center px-2 pb-3 gap-3">
+          <h3 className="text-sm line-clamp-1">{name}</h3>
 
           <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
             <DrawerTrigger asChild>
               <button
-                className="w-36 h-7 flex justify-center items-center bg-primary rounded-lg cursor-pointer select-none gap-0.5"
+                className="w-36 h-7 flex justify-center items-center bg-primary rounded-lg cursor-pointer select-none outline-none gap-0.5"
                 type="button"
               >
                 <img src="/dollar.svg" alt="DOLLAR" width={12} height={12} />
-                <span className="text-sm">{price}</span>
+                <span className="text-sm">{(price / USD_DECIMALS).toFixed(2)}</span>
               </button>
             </DrawerTrigger>
 
@@ -62,7 +68,7 @@ export default function ProductCard({ id, name, description, price, images }: Pr
                 <div className="flex justify-between items-center gap-6">
                   <img
                     className="basis-1/3 object-cover rounded-xl"
-                    src={"/shampoo.png"}
+                    src={images[0]}
                     alt={name}
                     width={96}
                     height={96}
@@ -115,7 +121,7 @@ export default function ProductCard({ id, name, description, price, images }: Pr
                   <h3 className="font-medium line-clamp-1">{name}</h3>
                   <div className="flex items-center bg-primary px-2 py-0.5 rounded-sm">
                     <img src="/dollar.svg" alt="DOLLAR" width={10} height={12} />
-                    <span className="text-xs">{price}</span>
+                    <span className="text-xs">{(price / USD_DECIMALS).toFixed(2)}</span>
                   </div>
                 </div>
                 <p className="text-xs text-zinc-300 line-clamp-6">{description}</p>
@@ -126,7 +132,7 @@ export default function ProductCard({ id, name, description, price, images }: Pr
                   onClick={handlePurchase}
                 >
                   <img src={currency === "USDC" ? "/usdc.svg" : "/usdt.svg"} alt="CURRENCY" width={18} height={18} />
-                  <span className="font-medium">{price * quantity}</span>
+                  <span className="font-medium">{((price * quantity) / USD_DECIMALS).toFixed(2)}</span>
                 </button>
               </div>
             </DrawerContent>
