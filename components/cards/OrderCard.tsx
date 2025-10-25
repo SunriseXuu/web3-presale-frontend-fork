@@ -56,7 +56,9 @@ export default function OrderCard({
       router.push("/orders?status=paid");
     } catch (err: unknown) {
       const errMsg = (err as Error).message;
+
       if (errMsg.includes("Simulation failed")) toast.error("This transaction has already been processed.");
+      else if (errMsg.includes("User rejected the request.")) toast.error("Request rejected.");
       else toast.error((err as Error).message);
     }
 

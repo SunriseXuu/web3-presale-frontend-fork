@@ -31,7 +31,10 @@ export default function ToggleConnection() {
 
       toast.success("Wallet connected.");
     } catch (err: unknown) {
-      toast.error((err as Error).message);
+      const errMsg = (err as Error).message;
+
+      if (errMsg.includes("User rejected the request.")) toast.error("Request rejected.");
+      else toast.error((err as Error).message);
     }
 
     setIsBtnLoading(false);
