@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
+// import Image from "next/image";
 
 import { getCurrentUser } from "@/action/users.action";
 import { loginWithSolana } from "@/lib/tools/solana_auth";
@@ -11,13 +10,11 @@ export default function ConnectButton() {
   const [walletAddress, setWalletAddress] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const pathname = usePathname();
-
   // 处理登录
   async function handleLogin() {
     try {
       setLoading(true);
-      await loginWithSolana(pathname);
+      await loginWithSolana();
     } catch (e) {
       alert((e as Error).message);
     } finally {
@@ -38,7 +35,7 @@ export default function ConnectButton() {
   if (walletAddress)
     return (
       <div className="flex items-center gap-2.5">
-        <Image className="w-5 h-5" src="/wallet.svg" alt="Wallet" width={20} height={20} />
+        <img className="w-5 h-5" src="/wallet.svg" alt="Wallet" width={20} height={20} />
         {walletAddress.slice(0, 6)} .... {walletAddress.slice(-6)}
       </div>
     );

@@ -1,30 +1,27 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { createOrder } from "@/action/orders.action";
 
-export default function ProductCard({
-  id,
-  name,
-  description,
-  price,
-  // images,
-}: {
+export type ProductType = {
   id: string;
   name: string;
   description: string;
   price: number;
   images: string[];
-}) {
+};
+
+export default function ProductCard({ id, name, description, price, images }: ProductType) {
   const [quantity, setQuantity] = useState<number>(1);
   const [currency, setCurrency] = useState<string>("USDC");
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   const router = useRouter();
+
+  console.log(images);
 
   // 处理购买逻辑
   async function handlePurchase() {
@@ -42,7 +39,7 @@ export default function ProductCard({
   return (
     <>
       <div className="flex flex-col items-center bg-neutral rounded-xl overflow-hidden gap-2">
-        <Image className="w-full object-cover" src={"/shampoo.png"} alt={name} width={96} height={96} />
+        <img className="w-full object-cover" src={"/shampoo.png"} alt={name} width={96} height={96} />
 
         <div className="flex flex-col items-center px-3 pb-4 gap-2">
           <h3 className="font-medium">{name}</h3>
@@ -53,7 +50,7 @@ export default function ProductCard({
                 className="w-36 h-7 flex justify-center items-center bg-primary rounded-lg cursor-pointer select-none gap-0.5"
                 type="button"
               >
-                <Image src="/dollar.svg" alt="DOLLAR" width={12} height={12} />
+                <img src="/dollar.svg" alt="DOLLAR" width={12} height={12} />
                 <span className="text-sm">{price}</span>
               </button>
             </DrawerTrigger>
@@ -63,7 +60,7 @@ export default function ProductCard({
                 <DrawerTitle className="text-white text-xl text-center font-medium">Check Your Order</DrawerTitle>
 
                 <div className="flex justify-between items-center gap-6">
-                  <Image
+                  <img
                     className="basis-1/3 object-cover rounded-xl"
                     src={"/shampoo.png"}
                     alt={name}
@@ -117,7 +114,7 @@ export default function ProductCard({
                 <div className="w-full flex justify-between items-center">
                   <h3 className="font-medium line-clamp-1">{name}</h3>
                   <div className="flex items-center bg-primary px-2 py-0.5 rounded-sm">
-                    <Image src="/dollar.svg" alt="DOLLAR" width={10} height={12} />
+                    <img src="/dollar.svg" alt="DOLLAR" width={10} height={12} />
                     <span className="text-xs">{price}</span>
                   </div>
                 </div>
@@ -128,7 +125,7 @@ export default function ProductCard({
                   type="button"
                   onClick={handlePurchase}
                 >
-                  <Image src={currency === "USDC" ? "/usdc.svg" : "/usdt.svg"} alt="CURRENCY" width={18} height={18} />
+                  <img src={currency === "USDC" ? "/usdc.svg" : "/usdt.svg"} alt="CURRENCY" width={18} height={18} />
                   <span className="font-medium">{price * quantity}</span>
                 </button>
               </div>

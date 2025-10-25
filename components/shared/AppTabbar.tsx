@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -17,18 +17,18 @@ export default function AppTabbar() {
 
           <Link className="flex flex-col items-center gap-0.5 mt-0.5" href="/">
             {pathname !== "/" ? (
-              <Image src="/home.svg" alt="Home" width={24} height={24} />
+              <img src="/home.svg" alt="Home" width={24} height={24} />
             ) : (
-              <Image src="/home-selected.svg" alt="Home" width={24} height={24} />
+              <img src="/home-selected.svg" alt="Home" width={24} height={24} />
             )}
             <span className={`text-xs ${pathname === "/" ? "text-primary" : ""}`}>Home</span>
           </Link>
 
           <Link className="flex flex-col items-center gap-0.5 mt-0.5" href="/me">
             {pathname !== "/me" ? (
-              <Image src="/me.svg" alt="Me" width={24} height={24} />
+              <img src="/me.svg" alt="Me" width={24} height={24} />
             ) : (
-              <Image src="/me-selected.svg" alt="Me" width={24} height={24} />
+              <img src="/me-selected.svg" alt="Me" width={24} height={24} />
             )}
             <span className={`text-xs ${pathname === "/me" ? "text-primary" : ""}`}>Account</span>
           </Link>

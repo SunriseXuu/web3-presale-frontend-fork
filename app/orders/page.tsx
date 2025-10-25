@@ -1,18 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Image from "next/image";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-
 import OrderCard, { OrderType } from "@/components/cards/OrderCard";
 import { getOrders } from "@/action/orders.action";
 import { orderStatusMap } from "@/lib/constants";
 
-export default function page() {
+function OrdersPageContent() {
   const [orders, setOrders] = useState<OrderType[]>([]);
-
-  // 解析 URL 查询参数
   const searchParams = useSearchParams();
   const status = searchParams.get("status");
 
@@ -21,7 +17,6 @@ export default function page() {
       const { data: ordersData } = await getOrders(status ? { status } : {});
       setOrders((ordersData.orders as OrderType[]) || []);
     };
-
     fetchOrders();
   }, [status]);
 
@@ -29,7 +24,7 @@ export default function page() {
     <div className="min-h-screen flex flex-col pb-12 gap-6">
       <section className="h-16 flex justify-between items-end bg-primary px-4 pb-2">
         <Link href="/me">
-          <Image
+          <img
             className="w-6 h-6 cursor-pointer rotate-180"
             src="/chevron-r.svg"
             alt="ChevronR"
@@ -46,7 +41,7 @@ export default function page() {
           <Link
             key={item.value || "all"}
             href={item.value ? `/orders?status=${item.value}` : "/orders"}
-            className={`${
+            className={`$${
               status === item.value || (!status && item.value === "") ? "bg-primary" : "bg-neutral"
             } text-sm rounded-sm px-2.5 py-0.5`}
           >
@@ -63,5 +58,13 @@ export default function page() {
         )}
       </section>
     </div>
+  );
+}
+
+export default function OrdersPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <OrdersPageContent />
+    </Suspense>
   );
 }

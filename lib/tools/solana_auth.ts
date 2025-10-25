@@ -5,7 +5,7 @@ import bs58 from "bs58";
 import { getUserNonce, loginUser, logoutUser } from "@/action/users.action";
 
 // 核心登录流程
-export async function loginWithSolana(pathname: string) {
+export async function loginWithSolana() {
   const { solana } = window as any;
   if (!solana?.isPhantom) throw new Error("Please install the Phantom wallet extension");
 

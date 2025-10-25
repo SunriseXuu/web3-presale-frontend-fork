@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+// import Image from "next/image";
 
 export default function FaqCard({ id, question, answer }: { id: number; question: string; answer: string }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="relative flex flex-col bg-neutral rounded-xl p-4 gap-2" onClick={() => setIsOpen(!isOpen)}>
-      <Image
+      <img
         className={`w-5 h-5 absolute top-4 right-4 cursor-pointer transition-transform duration-200 ${
           isOpen ? "rotate-90" : ""
         }`}

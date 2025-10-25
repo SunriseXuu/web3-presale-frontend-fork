@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="zh">
-      <body className="bg-surface text-white scrollbar-hide">
-        <main className="max-w-[450px] min-w-[350px] mx-auto">
+      <body className="bg-black/90 text-white scrollbar-hide">
+        <main className="max-w-[450px] min-w-[350px] bg-surface mx-auto">
           {children}
           <AppTabbar />
         </main>

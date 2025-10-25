@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+// import Image from "next/image";
 
 import payWithSolana from "@/lib/tools/solana_pay";
 import { USD_DECIMALS } from "@/lib/constants";
@@ -43,7 +43,7 @@ export default function OrderCard({
 
   return (
     <div key={order_id} className="flex justify-between items-start bg-neutral rounded-xl px-3 py-2 gap-3">
-      <Image
+      <img
         className="w-24 h-24 object-cover rounded-xl"
         src={"/shampoo.png"}
         alt={product_snapshot.name}
@@ -56,7 +56,7 @@ export default function OrderCard({
         <div className="w-full flex justify-between items-center">
           <p className="text-sm font-medium line-clamp-1">{product_snapshot.name}</p>
           <div className="flex items-center bg-primary px-2 py-0.5 rounded-sm">
-            <Image src="/dollar.svg" alt="DOLLAR" width={10} height={12} />
+            <img src="/dollar.svg" alt="DOLLAR" width={10} height={12} />
             <span className="text-xs">{product_snapshot.price / USD_DECIMALS}</span>
           </div>
         </div>

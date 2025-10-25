@@ -2,7 +2,7 @@
 
 import axios from "axios";
 
-import { API_BASE_URL, AUTH_STORE } from "@/lib/constants";
+import { AUTH_STORE } from "@/lib/constants";
 
 type ResponseType = {
   id: string;
@@ -32,9 +32,9 @@ export default async function requestHandler({
 }): Promise<ResponseType> {
   try {
     const token = localStorage.getItem(AUTH_STORE);
+    let url = `/api/v1/${endPoint}`;
 
     // 处理 params
-    let url = `${API_BASE_URL}${endPoint}`;
     if (params)
       Object.entries(params).forEach(
         ([key, value]) => (url = url.replace(`:${key}`, encodeURIComponent(String(value))))

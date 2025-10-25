@@ -1,28 +1,32 @@
-import Image from "next/image";
+"use client";
 
-import ProductCard from "@/components/cards/ProductCard";
+import { useEffect, useState } from "react";
+// // import Image from "next/image";
+
+import ProductCard, { ProductType } from "@/components/cards/ProductCard";
 import { getProducts } from "@/action/products.action";
 import { USD_DECIMALS } from "@/lib/constants";
 
-type Product = {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  images: string[];
-};
+export default function HomePage() {
+  const [products, setProducts] = useState<ProductType[]>([]);
 
-export default async function page() {
-  const { data: productsData } = await getProducts({ status: "active" });
-  const products: Product[] = ((productsData.products as Product[]) || []).map((product) => ({
-    ...product,
-    price: product.price / USD_DECIMALS,
-  }));
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data: productsData } = await getProducts({ status: "active" });
+      const products: ProductType[] = ((productsData.products as ProductType[]) || []).map((product) => ({
+        ...product,
+        price: product.price / USD_DECIMALS,
+      }));
+      setProducts(products);
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col pb-6 gap-6">
       <section className="relative h-48 overflow-hidden">
-        <Image
+        <img
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-auto object-cover z-0"
           src="/cover.png"
           alt="Cover"
