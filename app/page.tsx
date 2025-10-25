@@ -71,8 +71,6 @@ export default function HomePage() {
       </section>
 
       <section className="flex flex-col px-4 gap-4">
-        <h1 className="text-2xl font-bold">Products Gallery</h1>
-
         <div className="grid grid-cols-2 gap-3">
           {products.map((product) => (
             <ProductCard key={product.id} {...product} />

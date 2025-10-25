@@ -8,7 +8,7 @@ export default function FaqCard({ id, question, answer }: { id: number; question
 
   return (
     <div
-      className="relative flex flex-col bg-neutral rounded-xl cursor-pointer p-4 gap-2"
+      className="relative flex flex-col bg-neutral rounded-xl shadow-md cursor-pointer p-4 gap-2"
       onClick={() => setIsOpen(!isOpen)}
     >
       <img
