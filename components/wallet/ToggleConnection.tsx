@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 // import Image from "next/image";
+import toast from "react-hot-toast";
 
 import { getCurrentUser } from "@/action/users.action";
 import { loginWithSolana, logout } from "@/lib/tools/solana_auth";
@@ -24,7 +25,7 @@ export default function ToggleConnection() {
       setLoading(true);
       await loginWithSolana();
     } catch (e) {
-      alert((e as Error).message);
+      toast.error((e as Error).message);
     } finally {
       setLoading(false);
       await fetchUser();

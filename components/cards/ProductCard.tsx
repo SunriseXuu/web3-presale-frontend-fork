@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { createOrder } from "@/action/orders.action";
@@ -27,8 +28,11 @@ export default function ProductCard({ id, name, description, price, images }: Pr
     const { success, error } = await createOrder({ product_id: id, quantity });
 
     if (!success) {
-      if (error?.message) alert(error.message);
-      else if (confirm("Please connect your wallet first.")) router.push("/me");
+      if (error?.message) toast.error(error.message);
+      else {
+        toast.error("Please connect your wallet first.");
+        router.push("/me");
+      }
     } else {
       setDrawerOpen(false);
     }

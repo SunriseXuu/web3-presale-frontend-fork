@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import AppTabbar from "@/components/shared/AppTabbar";
+import AppToaster from "@/components/shared/AppToaster";
 
 export const metadata: Metadata = {
   title: "MyShop - Web3 Presale",
@@ -15,6 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main className="max-w-[450px] min-w-[350px] bg-surface mx-auto">
           {children}
           <AppTabbar />
+          <AppToaster />
         </main>
       </body>
     </html>
