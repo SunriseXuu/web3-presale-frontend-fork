@@ -66,7 +66,7 @@ export default function OrderCard({
   };
 
   return (
-    <div key={order_id} className="flex justify-between items-start bg-neutral rounded-xl shadow-md p-2 gap-3">
+    <div className="flex justify-between items-start bg-neutral rounded-xl shadow-md p-2 gap-3">
       <img
         className="w-24 h-24 object-cover rounded-xl"
         src={"/shampoo.png"}

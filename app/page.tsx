@@ -25,7 +25,7 @@ export default function HomePage() {
 
     const { data: productsData } = await getProducts({ status: "active", page: currPage, limit: 8 });
 
-    const prods: ProductType[] = (productsData.products as ProductType[]) || [];
+    const prods = (productsData.products as ProductType[]) || [];
     totalPageRef.current = productsData.pagination?.total_pages || 1;
 
     setIsFetching(false);

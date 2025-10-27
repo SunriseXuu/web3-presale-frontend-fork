@@ -1,13 +1,12 @@
 import bs58 from "bs58";
-import { SystemProgram } from "@solana/web3.js";
-import { clusterApiUrl, PublicKey, Connection } from "@solana/web3.js";
+import { Connection, SystemProgram, PublicKey, clusterApiUrl } from "@solana/web3.js";
 import { ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddress } from "@solana/spl-token";
 import { Program, AnchorProvider, utils, BN, setProvider } from "@coral-xyz/anchor";
 
 import { getUserNonce, loginUser, logoutUser } from "@/action/users.action";
 
+import { PLATFORM_WALLET, USD_DECIMALS } from "@/lib/constants";
 import idl from "@/lib/idl/presale_contract.json";
-import { USD_DECIMALS } from "@/lib/constants";
 
 // 核心登录流程
 export const loginWithSolana = async () => {
@@ -71,11 +70,10 @@ export const payWithSolana = async ({
 
   // TODO: 临时硬编码 usdc 和平台钱包
   const usdc = "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU";
-  const platformWallet = "AdmnrQJtt4vRN969ayudxfNDqiNa2AAQ1ErnUPTMYRgJ";
 
   // 4. 账户准备
   const tokenMint = new PublicKey(usdc);
-  const platformAuthority = new PublicKey(platformWallet);
+  const platformAuthority = new PublicKey(PLATFORM_WALLET);
   const buyerTokenAccount = await getAssociatedTokenAddress(tokenMint, buyer);
   const platformTokenAccount = await getAssociatedTokenAddress(tokenMint, platformAuthority);
 

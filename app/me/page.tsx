@@ -41,8 +41,8 @@ export default function page() {
         <h3 className="text-lg font-bold">Settings</h3>
 
         <div className="flex flex-col bg-neutral rounded-xl px-6 py-5 gap-4">
-          <Link className="flex justify-between items-center" href="/profile">
-            <span className="text-sm">Profile Settings</span>
+          <Link className="flex justify-between items-center" href="/shipping">
+            <span className="text-sm">Shipping Addresses</span>
             <img className="w-4 h-4" src="/chevron-r.svg" alt="ChevronR" width={16} height={16} />
           </Link>
           <hr className="border-zinc-600" />
