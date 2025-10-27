@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 // import Image from "next/image";
 import Link from "next/link";
 
@@ -10,7 +10,7 @@ import AppPlaceholder from "@/components/shared/AppPlaceholder";
 
 import { getShippingAddresses } from "@/action/shipping.action";
 
-export default function page() {
+export default function ShippingPage() {
   const [defaultAddress, setDefaultAddress] = useState<ShippingAddressType | null>(null);
   const [otherAddresses, setOtherAddresses] = useState<ShippingAddressType[]>([]);
   const [isFetching, setIsFetching] = useState<boolean>(false);
