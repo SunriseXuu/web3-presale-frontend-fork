@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 import ShippingCard, { ShippingAddressType } from "@/components/cards/ShippingCard";
 import AddShippingForm from "@/components/forms/AddShippingForm";
@@ -21,7 +22,14 @@ export default function ShippingPage() {
     if (isFetching) return;
     setIsFetching(true);
 
-    const { data: shippinAddressesData } = await getShippingAddresses();
+    const { data: shippinAddressesData, success } = await getShippingAddresses();
+    if (!success) {
+      toast.error("Please connect your wallet first.");
+      setIsFetching(false);
+      router.push("/me");
+      return;
+    }
+
     const shAddrs = (shippinAddressesData as unknown as ShippingAddressType[]) || [];
 
     // 分离出默认地址

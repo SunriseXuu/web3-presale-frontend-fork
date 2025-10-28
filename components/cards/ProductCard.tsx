@@ -147,6 +147,7 @@ export default function ProductCard({ id, name, description, price, images }: Pr
         toast.error("Please connect your wallet first.");
         setIsAddressFetching(false);
         setIsShippingDrawerOpen(false);
+        router.push("/me");
         return;
       }
 
