@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-// import Image from "next/image";
 
 export default function FaqCard({ id, question, answer }: { id: number; question: string; answer: string }) {
   const [isOpen, setIsOpen] = useState(false);

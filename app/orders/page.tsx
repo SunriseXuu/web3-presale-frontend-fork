@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef, Suspense } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import OrderCard, { OrderType } from "@/components/cards/OrderCard";
 import AppPlaceholder from "@/components/shared/AppPlaceholder";
@@ -18,6 +18,8 @@ function OrdersPageContent() {
   const totalPageRef = useRef<number>(1);
   const fetchedLatestPageRef = useRef<number>(0);
 
+  const router = useRouter();
+
   const searchParams = useSearchParams();
   const status = searchParams.get("status");
 
@@ -29,11 +31,11 @@ function OrdersPageContent() {
     setIsFetching(true);
 
     const { data: ordersData } = await getOrders(
-      status ? { status, page: currPage, limit: 10 } : { page: currPage, limit: 10 }
+      status ? { status, page: currPage, limit: 8 } : { page: currPage, limit: 8 }
     );
 
     const newOrders: OrderType[] = (ordersData.orders as OrderType[]) || [];
-    totalPageRef.current = ordersData.pagination?.total_pages || 1;
+    totalPageRef.current = Math.ceil((ordersData.total as number) / (ordersData.limit as number));
 
     setIsFetching(false);
 
@@ -46,10 +48,10 @@ function OrdersPageContent() {
     fetchedLatestPageRef.current = 1; // 立即标记为已拉取过该页
     setIsFetching(true);
 
-    const { data: ordersData } = await getOrders(status ? { status, page: 1, limit: 10 } : { page: 1, limit: 10 });
+    const { data: ordersData } = await getOrders(status ? { status, page: 1, limit: 8 } : { page: 1, limit: 8 });
 
     const newOrders: OrderType[] = (ordersData.orders as OrderType[]) || [];
-    totalPageRef.current = ordersData.pagination?.total_pages || 1;
+    totalPageRef.current = Math.ceil((ordersData.total as number) / (ordersData.limit as number));
 
     setIsFetching(false);
 
@@ -84,15 +86,14 @@ function OrdersPageContent() {
   return (
     <div className="min-h-screen flex flex-col pb-12 gap-6">
       <section className="h-16 flex justify-between items-end bg-primary px-4 pb-2">
-        <Link href="/me">
-          <img
-            className="w-6 h-6 cursor-pointer rotate-180"
-            src="/chevron-r.svg"
-            alt="ChevronR"
-            width={24}
-            height={24}
-          />
-        </Link>
+        <img
+          className="w-6 h-6 cursor-pointer rotate-180"
+          src="/chevron-r.svg"
+          alt="ChevronR"
+          width={24}
+          height={24}
+          onClick={() => router.back()}
+        />
         <p className="font-bold">My Orders</p>
         <div className="w-6" />
       </section>

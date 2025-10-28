@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
-import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { OrderType } from "@/components/cards/OrderCard";
+import { ShippingAddressType } from "@/components/cards/ShippingCard";
+import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 
 import { createOrder } from "@/action/orders.action";
+import { getShippingAddresses } from "@/action/shipping.action";
 
 import { payWithSolana } from "@/lib/tools/solana";
 import { USD_DECIMALS } from "@/lib/constants";
@@ -20,10 +22,60 @@ export type ProductType = {
   images: string[];
 };
 
+// 购买商品时选择收货地址的弹窗组件
+function ShippingAddressComp({
+  shippingAddr,
+  mode,
+  isSelected,
+  onSelect,
+}: {
+  shippingAddr?: ShippingAddressType;
+  mode?: "select" | "view";
+  isSelected?: boolean;
+  onSelect?: () => void;
+}) {
+  return (
+    <div
+      className="flex justify-between items-center cursor-pointer border-b border-zinc-700 gap-4"
+      onClick={() => {
+        if (mode === "select" && onSelect) onSelect();
+      }}
+    >
+      {mode === "select" && (
+        <>
+          {isSelected ? (
+            <div className="min-w-6 h-6 flex justify-center items-center border border-white rounded-full">
+              <span className="w-4 h-4 flex justify-center items-center bg-primary text-xs font-bold rounded-full" />
+            </div>
+          ) : (
+            <div className="min-w-6" />
+          )}
+        </>
+      )}
+
+      <div className="flex flex-col pb-3 gap-1">
+        <p className="font-medium line-clamp-1">{shippingAddr?.address}</p>
+        <div className="flex items-center text-sm text-zinc-400 gap-3">
+          <span>{shippingAddr?.name}</span>
+          <span>{shippingAddr?.phone}</span>
+          {shippingAddr?.is_default && <span className="text-xs text-primary font-bold">DEFAULT</span>}
+        </div>
+      </div>
+
+      {mode === "view" && <img className="w-5 h-5" src="/chevron-r.svg" alt="ChevronR" width={20} height={20} />}
+    </div>
+  );
+}
+
 export default function ProductCard({ id, name, description, price, images }: ProductType) {
   const [quantity, setQuantity] = useState<number>(1);
   const [currency, setCurrency] = useState<string>("USDC");
-  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+
+  const [selectedAddress, setSelectedAddress] = useState<ShippingAddressType>();
+  const [shippingAddresses, setShippingAddresses] = useState<ShippingAddressType[]>([]);
+
+  const [isProductDrawerOpen, setIsProductDrawerOpen] = useState<boolean>(false);
+  const [isShippingDrawerOpen, setIsShippingDrawerOpen] = useState<boolean>(false);
   const [isBtnLoading, setIsBtnLoading] = useState<boolean>(false);
 
   const router = useRouter();
@@ -32,7 +84,11 @@ export default function ProductCard({ id, name, description, price, images }: Pr
   const handlePurchase = async () => {
     setIsBtnLoading(true);
 
-    const { data: order, success, error } = await createOrder({ product_id: id, quantity });
+    const {
+      data: order,
+      success,
+      error,
+    } = await createOrder({ product_id: id, quantity, shopping_info: selectedAddress });
     if (!success) {
       if (error?.message) toast.error(error.message);
       else {
@@ -65,8 +121,25 @@ export default function ProductCard({ id, name, description, price, images }: Pr
     }
 
     setIsBtnLoading(false);
-    setIsDrawerOpen(false);
+    setIsProductDrawerOpen(false);
   };
+
+  // 打开弹窗时获取当前登录用户的收货地址
+  useEffect(() => {
+    if (!isProductDrawerOpen) return;
+
+    (async () => {
+      const { data: shippinAddressesData } = await getShippingAddresses();
+      const shAddrs = (shippinAddressesData as unknown as ShippingAddressType[]) || [];
+
+      // 分离出默认地址
+      const defaultAddr = shAddrs.find((addr) => addr.is_default);
+      if (defaultAddr) setSelectedAddress(defaultAddr);
+
+      // 全部地址列表
+      setShippingAddresses(shAddrs);
+    })();
+  }, [isProductDrawerOpen]);
 
   return (
     <div className="flex flex-col items-center bg-neutral rounded-xl shadow-md overflow-hidden gap-2">
@@ -74,7 +147,7 @@ export default function ProductCard({ id, name, description, price, images }: Pr
         className={`w-full aspect-[1] object-cover cursor-pointer ${!images[0] ? " object-contain! p-16!" : ""}`}
         src={images[0] || "/no-img.svg"}
         alt={name}
-        onClick={() => setIsDrawerOpen(true)}
+        onClick={() => setIsProductDrawerOpen(true)}
         onError={(e) => {
           const img = e.currentTarget as HTMLImageElement;
           img.src = "/no-img.svg";
@@ -84,11 +157,11 @@ export default function ProductCard({ id, name, description, price, images }: Pr
       />
 
       <div className="flex flex-col items-center px-2 pb-3 gap-3">
-        <h3 className="text-sm font-medium cursor-pointer line-clamp-1" onClick={() => setIsDrawerOpen(true)}>
+        <h3 className="text-sm font-medium cursor-pointer line-clamp-1" onClick={() => setIsProductDrawerOpen(true)}>
           {name}
         </h3>
 
-        <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+        <Drawer open={isProductDrawerOpen} onOpenChange={setIsProductDrawerOpen}>
           <DrawerTrigger asChild>
             <button
               className="w-36 h-7 flex justify-center items-center bg-primary rounded-lg cursor-pointer select-none outline-none gap-0.5"
@@ -101,7 +174,37 @@ export default function ProductCard({ id, name, description, price, images }: Pr
 
           <DrawerContent className="min-w-[350px] max-w-[450px] min-h-[200px] bg-surface border-none rounded-t-2xl! mx-auto">
             <div className="flex flex-col px-4 pt-4 pb-8 gap-5">
-              <DrawerTitle className="text-white text-xl text-center font-medium">Check Your Order</DrawerTitle>
+              <DrawerTitle className="text-white text-xl font-semibold">Check Your Order</DrawerTitle>
+
+              <Drawer open={isShippingDrawerOpen} onOpenChange={setIsShippingDrawerOpen}>
+                <DrawerTrigger asChild>
+                  {/** 用原生组件包裹一层以使其可以打开弹窗 */}
+                  <div>
+                    <ShippingAddressComp shippingAddr={selectedAddress} mode="view" />
+                  </div>
+                </DrawerTrigger>
+
+                <DrawerContent className="min-w-[350px] max-w-[450px] min-h-[200px] bg-surface border-none rounded-t-2xl! mx-auto">
+                  <div className="flex flex-col px-4 pt-4 pb-8 gap-5">
+                    <DrawerTitle className="text-white text-xl font-semibold">Select Shipping Addresses</DrawerTitle>
+
+                    <div className="flex flex-col gap-4">
+                      {shippingAddresses.map((addr) => (
+                        <ShippingAddressComp
+                          key={addr.id}
+                          shippingAddr={addr}
+                          mode="select"
+                          isSelected={selectedAddress?.id === addr.id}
+                          onSelect={() => {
+                            setSelectedAddress(addr);
+                            setIsShippingDrawerOpen(false);
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </DrawerContent>
+              </Drawer>
 
               <div className="flex justify-between items-center gap-6">
                 <img
@@ -130,16 +233,8 @@ export default function ProductCard({ id, name, description, price, images }: Pr
 
                   <div className="flex items-center">
                     <p className="w-20 text-sm text-zinc-400">Buy with</p>
-                    {/* <select
-                        className="w-20 h-6 bg-neutral text-center text-xs border border-zinc-600 focus:border-primary hover:border-primary duration-200 rounded outline-none"
-                        defaultValue="USDC"
-                        onChange={(e) => setCurrency(e.target.value)}
-                      >
-                        <option value="USDT">USDT</option>
-                        <option value="USDC">USDC</option>
-                      </select> */}
 
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center leading-none gap-1">
                       <button
                         className={`w-16 h-8 ${
                           currency === "USDC" ? "bg-primary" : "bg-neutral"

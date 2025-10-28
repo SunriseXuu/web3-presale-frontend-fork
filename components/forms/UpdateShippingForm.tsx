@@ -68,7 +68,7 @@ export default function UpdateShippingForm({
 
       <DrawerContent className="min-w-[350px] max-w-[450px] min-h-[200px] bg-surface border-none rounded-t-2xl! mx-auto">
         <div className="flex flex-col px-4 pt-4 pb-8 gap-5">
-          <DrawerTitle className="text-white text-xl text-center font-medium">Update Shipping Address</DrawerTitle>
+          <DrawerTitle className="text-white text-xl font-semibold">Update Shipping Address</DrawerTitle>
 
           <form action={updateShippingAction} className="flex flex-col gap-4">
             <AppInput

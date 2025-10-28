@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-// // import Image from "next/image";
 
 import ProductCard, { ProductType } from "@/components/cards/ProductCard";
 import AppPlaceholder from "@/components/shared/AppPlaceholder";

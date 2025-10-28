@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-// import Image from "next/image";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
@@ -68,37 +67,39 @@ export default function OrderCard({
   return (
     <div className="flex justify-between items-start bg-neutral rounded-xl shadow-md p-2 gap-3">
       <img
-        className="w-24 h-24 object-cover rounded-xl"
-        src={"/shampoo.png"}
+        className={`w-24 h-24 object-cover rounded-xl select-none ${
+          !product_snapshot.images[0] ? " object-contain! p-8!" : ""
+        }`}
+        src={product_snapshot.images[0] || "/no-img.svg"}
         alt={product_snapshot.name}
-        width={96}
-        height={96}
-        onClick={handlePayNow}
+        onError={(e) => {
+          const img = e.currentTarget as HTMLImageElement;
+          img.src = "/no-img.svg";
+          img.style.objectFit = "contain";
+          img.style.padding = "32px";
+        }}
       />
 
-      <div className="flex-1 h-24 flex flex-col justify-around">
+      <div className="flex-1 h-24 flex flex-col justify-between">
         <div className="flex justify-between items-center gap-2">
           <p className="text-sm font-medium line-clamp-1">{product_snapshot.name}</p>
           <span className="text-sm">×{quantity}</span>
         </div>
 
+        <div className="text-xs text-zinc-300 truncate">ID: {order_id}</div>
+
         <div className="flex items-center text-xs">
-          <img src="/dollar2.svg" alt="DOLLAR" width={10} height={10} />
-          <span className="text-primary font-bold">{(product_snapshot.price / USD_DECIMALS).toFixed(2)}</span>
-          <span className="text-zinc-400 truncate mx-1">-</span>
           <span className="text-primary font-bold">{status.toUpperCase()}</span>
-          <span className="text-zinc-400 truncate mx-1">-</span>
-          <span className="text-zinc-300 truncate">{order_id}</span>
+
+          <span className="text-zinc-400 truncate mx-2">-</span>
+
+          <span className="text-zinc-300 mr-1">Total:</span>
+          <img src="/dollar2.svg" alt="DOLLAR" width={12} height={12} />
+          <span className="text-primary font-bold">{(total_price / USD_DECIMALS).toFixed(2)}</span>
         </div>
 
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <div className="flex items-center text-sm">
-              <span className="text-zinc-300 mr-1">Total:</span>
-              <img src="/dollar2.svg" alt="DOLLAR" width={12} height={12} />
-              <span className="text-primary font-bold">{(total_price / USD_DECIMALS).toFixed(2)}</span>
-            </div>
-
             {status === "pending" ? (
               <CountdownTimer createdAt={created_at} />
             ) : (

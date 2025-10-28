@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-// import Image from "next/image";
 import toast from "react-hot-toast";
 
 import { getCurrentUser } from "@/action/users.action";

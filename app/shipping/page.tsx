@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-// import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import ShippingCard, { ShippingAddressType } from "@/components/cards/ShippingCard";
 import AddShippingForm from "@/components/forms/AddShippingForm";
@@ -14,6 +13,8 @@ export default function ShippingPage() {
   const [defaultAddress, setDefaultAddress] = useState<ShippingAddressType | null>(null);
   const [otherAddresses, setOtherAddresses] = useState<ShippingAddressType[]>([]);
   const [isFetching, setIsFetching] = useState<boolean>(false);
+
+  const router = useRouter();
 
   // 获取收货地址列表
   const fetchShippingAddresses = async () => {
@@ -29,7 +30,7 @@ export default function ShippingPage() {
 
     // 分离出其他地址
     const otherAddrs = shAddrs.filter((addr) => !addr.is_default);
-    setOtherAddresses((prev) => [...prev, ...otherAddrs]);
+    setOtherAddresses(otherAddrs);
 
     setIsFetching(false);
   };
@@ -43,15 +44,14 @@ export default function ShippingPage() {
     <div className="min-h-screen flex flex-col pb-12 gap-6">
       <section className="h-16 flex justify-between items-end bg-primary px-4 pb-2">
         <div className="w-12">
-          <Link href="/me">
-            <img
-              className="w-6 h-6 cursor-pointer rotate-180"
-              src="/chevron-r.svg"
-              alt="ChevronR"
-              width={24}
-              height={24}
-            />
-          </Link>
+          <img
+            className="w-6 h-6 cursor-pointer rotate-180"
+            src="/chevron-r.svg"
+            alt="ChevronR"
+            width={24}
+            height={24}
+            onClick={() => router.back()}
+          />
         </div>
         <p className="font-bold">Shipping Addresses</p>
         <AddShippingForm />
