@@ -13,6 +13,8 @@ import { getShippingAddresses } from "@/action/shipping.action";
 
 import { payWithSolana } from "@/lib/tools/solana";
 import { USD_DECIMALS } from "@/lib/constants";
+import AppPlaceholder from "../shared/AppPlaceholder";
+import Link from "next/link";
 
 export type ProductType = {
   id: string;
@@ -53,13 +55,19 @@ function ShippingAddressComp({
         </>
       )}
 
-      <div className="flex flex-col pb-3 gap-1">
-        <p className="font-medium line-clamp-1">{shippingAddr?.address}</p>
-        <div className="flex items-center text-sm text-zinc-400 gap-3">
-          <span>{shippingAddr?.name}</span>
-          <span>{shippingAddr?.phone}</span>
-          {shippingAddr?.is_default && <span className="text-xs text-primary font-bold">DEFAULT</span>}
-        </div>
+      <div className="flex-1 flex flex-col pb-3 gap-1">
+        {shippingAddr ? (
+          <>
+            <p className="font-medium line-clamp-1">{shippingAddr?.address}</p>
+            <div className="flex items-center text-sm text-zinc-400 gap-3">
+              <span>{shippingAddr?.name}</span>
+              <span>{shippingAddr?.phone}</span>
+              {shippingAddr?.is_default && <span className="text-xs text-primary font-bold">DEFAULT</span>}
+            </div>
+          </>
+        ) : (
+          <p>Select Shipping Address</p>
+        )}
       </div>
 
       {mode === "view" && <img className="w-5 h-5" src="/chevron-r.svg" alt="ChevronR" width={20} height={20} />}
@@ -76,6 +84,8 @@ export default function ProductCard({ id, name, description, price, images }: Pr
 
   const [isProductDrawerOpen, setIsProductDrawerOpen] = useState<boolean>(false);
   const [isShippingDrawerOpen, setIsShippingDrawerOpen] = useState<boolean>(false);
+
+  const [isAddressFetching, setIsAddressFetching] = useState<boolean>(false);
   const [isBtnLoading, setIsBtnLoading] = useState<boolean>(false);
 
   const router = useRouter();
@@ -126,18 +136,24 @@ export default function ProductCard({ id, name, description, price, images }: Pr
 
   // 打开弹窗时获取当前登录用户的收货地址
   useEffect(() => {
-    if (!isProductDrawerOpen) return;
+    if (!isProductDrawerOpen) return; // 未打开弹窗则不获取
+    if (selectedAddress && shippingAddresses.length > 0) return; // 已经获取过地址则不再获取
 
     (async () => {
+      setIsAddressFetching(true);
+
       const { data: shippinAddressesData } = await getShippingAddresses();
       const shAddrs = (shippinAddressesData as unknown as ShippingAddressType[]) || [];
 
       // 分离出默认地址
       const defaultAddr = shAddrs.find((addr) => addr.is_default);
       if (defaultAddr) setSelectedAddress(defaultAddr);
+      else if (shAddrs.length > 0) setSelectedAddress(shAddrs[0]);
 
       // 全部地址列表
       setShippingAddresses(shAddrs);
+
+      setIsAddressFetching(false);
     })();
   }, [isProductDrawerOpen]);
 
@@ -185,7 +201,7 @@ export default function ProductCard({ id, name, description, price, images }: Pr
                 </DrawerTrigger>
 
                 <DrawerContent className="min-w-[350px] max-w-[450px] min-h-[200px] bg-surface border-none rounded-t-2xl! mx-auto">
-                  <div className="flex flex-col px-4 pt-4 pb-8 gap-5">
+                  <div className="flex flex-col px-4 pt-4 pb-8 mb-8 gap-5">
                     <DrawerTitle className="text-white text-xl font-semibold">Select Shipping Addresses</DrawerTitle>
 
                     <div className="flex flex-col gap-4">
@@ -201,6 +217,29 @@ export default function ProductCard({ id, name, description, price, images }: Pr
                           }}
                         />
                       ))}
+
+                      <AppPlaceholder
+                        text={
+                          shippingAddresses.length > 0
+                            ? "Loading more shipping addresses..."
+                            : "Loading shipping addresses..."
+                        }
+                        mode="loading"
+                        isShow={isAddressFetching}
+                      />
+
+                      <div className="flex flex-col items-center">
+                        <AppPlaceholder
+                          text="No shipping addresses found"
+                          mode="normal"
+                          isShow={shippingAddresses.length === 0 && !isAddressFetching}
+                        />
+                        {shippingAddresses.length === 0 && !isAddressFetching && (
+                          <Link href="/shipping" className="text-center text-primary border-b border-primary">
+                            Go add one
+                          </Link>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </DrawerContent>

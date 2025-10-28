@@ -28,7 +28,7 @@ const requestHandler = async ({
 }): Promise<ResponseType> => {
   try {
     const token = localStorage.getItem(AUTH_STORE);
-    let url = `/api/v1/${endPoint}`;
+    let url = `/api/v1${endPoint}`;
 
     // 处理 params
     if (params)
