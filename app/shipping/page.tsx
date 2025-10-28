@@ -81,13 +81,9 @@ export default function ShippingPage() {
           <ShippingCard key={addr.id} {...addr} />
         ))}
 
+        <AppPlaceholder text="Loading shipping addresses..." mode="loading" isShow={isFetching} />
         <AppPlaceholder
-          text={otherAddresses.length > 0 ? "Loading more shipping addresses..." : "Loading shipping addresses..."}
-          mode="loading"
-          isShow={isFetching}
-        />
-        <AppPlaceholder
-          text="No shipping addresses found"
+          text="No shipping address found"
           mode="normal"
           isShow={otherAddresses.length === 0 && !isFetching}
         />

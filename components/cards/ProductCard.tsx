@@ -142,7 +142,14 @@ export default function ProductCard({ id, name, description, price, images }: Pr
     (async () => {
       setIsAddressFetching(true);
 
-      const { data: shippinAddressesData } = await getShippingAddresses();
+      const { data: shippinAddressesData, success } = await getShippingAddresses();
+      if (!success) {
+        toast.error("Please connect your wallet first.");
+        setIsAddressFetching(false);
+        setIsShippingDrawerOpen(false);
+        return;
+      }
+
       const shAddrs = (shippinAddressesData as unknown as ShippingAddressType[]) || [];
 
       // 分离出默认地址
@@ -202,7 +209,7 @@ export default function ProductCard({ id, name, description, price, images }: Pr
 
                 <DrawerContent className="min-w-[350px] max-w-[450px] min-h-[200px] bg-surface border-none rounded-t-2xl! mx-auto">
                   <div className="flex flex-col px-4 pt-4 pb-8 mb-8 gap-5">
-                    <DrawerTitle className="text-white text-xl font-semibold">Select Shipping Addresses</DrawerTitle>
+                    <DrawerTitle className="text-white text-xl font-semibold">Select Shipping Address</DrawerTitle>
 
                     <div className="flex flex-col gap-4">
                       {shippingAddresses.map((addr) => (
@@ -218,19 +225,10 @@ export default function ProductCard({ id, name, description, price, images }: Pr
                         />
                       ))}
 
-                      <AppPlaceholder
-                        text={
-                          shippingAddresses.length > 0
-                            ? "Loading more shipping addresses..."
-                            : "Loading shipping addresses..."
-                        }
-                        mode="loading"
-                        isShow={isAddressFetching}
-                      />
-
+                      <AppPlaceholder text="Loading shipping addresses..." mode="loading" isShow={isAddressFetching} />
                       <div className="flex flex-col items-center">
                         <AppPlaceholder
-                          text="No shipping addresses found"
+                          text="No shipping address found"
                           mode="normal"
                           isShow={shippingAddresses.length === 0 && !isAddressFetching}
                         />
