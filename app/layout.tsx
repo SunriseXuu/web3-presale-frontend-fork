@@ -5,7 +5,7 @@ import AppTabbar from "@/components/shared/AppTabbar";
 import AppToaster from "@/components/shared/AppToaster";
 
 export const metadata: Metadata = {
-  title: "MyShop - Web3 Presale",
+  title: "MyShop - Web3 Presale～",
   description: "MyShop is the only Web3 presale platform you'll ever need for exclusive products.",
 };
 
