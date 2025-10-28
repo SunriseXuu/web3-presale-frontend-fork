@@ -23,7 +23,6 @@ jobs:
       - name: Build Next.js project  # 构建项目
         run: |
           npm run build  # Next.js 构建
-          npm run export  # 导出静态文件到 out/
         env:
           NODE_ENV: production  # 确保生产环境构建
 
