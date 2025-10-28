@@ -42,7 +42,7 @@ jobs:
           #   fi
           # "
           # 使用 rsync 同步 out/ 到服务器
-          rsync -avz --delete -e "ssh -i ~/.ssh/id_rsa" ./out/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.TARGET_DIR }}/
+          rsync -avz --delete --exclude=".user.ini" -e "ssh -i ~/.ssh/id_rsa" ./out/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.TARGET_DIR }}/
           # 可选：清理旧备份（已注释）
           # ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
           #   ls -t ${{ secrets.TARGET_DIR }}.backup.* 2>/dev/null | tail -n +2 | xargs rm -rf
