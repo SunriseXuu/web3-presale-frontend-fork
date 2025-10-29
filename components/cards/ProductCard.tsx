@@ -30,14 +30,11 @@ export default function ProductCard(productProps: ProductType) {
           {productProps.name}
         </h3>
 
-        {/* 外层条件用于不要让产品卡片加载完成的时候注册调用一大堆抽屉里的钩子 */}
-        {isProductDrawerOpen && (
-          <ProductDrawer
-            {...productProps}
-            isProductDrawerOpen={isProductDrawerOpen} // 内层条件用于开关抽屉本身
-            getIsProductDrawerOpen={setIsProductDrawerOpen}
-          />
-        )}
+        <ProductDrawer
+          {...productProps}
+          isProductDrawerOpen={isProductDrawerOpen}
+          getIsProductDrawerOpen={setIsProductDrawerOpen}
+        />
       </div>
     </div>
   );

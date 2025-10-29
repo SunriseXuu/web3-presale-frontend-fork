@@ -37,8 +37,6 @@ export default function ProductDrawer({
   const { connection } = useConnection();
   const wallet = useAnchorWallet();
 
-  console.log("123");
-
   // 处理购买逻辑
   const handlePurchase = async () => {
     setIsBtnLoading(true);
