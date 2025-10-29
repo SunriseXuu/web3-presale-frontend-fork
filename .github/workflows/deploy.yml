@@ -29,7 +29,7 @@ jobs:
       - name: Compress build output  # 压缩构建输出
         run: |
           # 创建压缩包，排除不需要的文件
-          tar -czf build.tar.gz -C out . --exclude=".user.ini" --exclude="*.log"
+          tar -czf build.tar.gz --exclude=".user.ini" --exclude="*.log" -C out .
           echo "压缩完成，文件大小: $(du -h build.tar.gz | cut -f1)"
 
       - name: Setup SSH  # 配置 SSH 访问
