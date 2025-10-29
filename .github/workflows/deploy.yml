@@ -1,0 +1,73 @@
+name: Deploy Next.js to Server
+
+on:
+  push:
+    branches:
+      - main  # 触发条件：push 到 main 分支
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest  # 使用 Ubuntu 环境
+    steps:
+      - name: Checkout code  # 检出代码
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js  # 设置 Node.js 环境
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'  # 替换为你的 Node 版本，Next.js 推荐 18 或 20
+
+      - name: Install dependencies  # 安装依赖
+        run: npm ci  # 使用 npm ci 确保一致性（可替换为 yarn install）
+
+      - name: Build Next.js project  # 构建项目
+        run: |
+          npm run build  # Next.js 构建
+        env:
+          NODE_ENV: production  # 确保生产环境构建
+
+      - name: Compress build output  # 压缩构建输出
+        run: |
+          # 创建压缩包，排除不需要的文件
+          tar -czf build.tar.gz --exclude=".user.ini" --exclude="*.log" -C out .
+          echo "压缩完成，文件大小: $(du -h build.tar.gz | cut -f1)"
+
+      - name: Setup SSH  # 配置 SSH 访问
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+
+      - name: Deploy to server  # 部署到服务器
+        run: |
+          # 可选：备份旧文件（已注释）
+          # ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
+          #   if [ -d '${{ secrets.TARGET_DIR }}' ]; then
+          #     mv ${{ secrets.TARGET_DIR }} ${{ secrets.TARGET_DIR }}.backup.\$(date +%Y%m%d%H%M%S)
+          #   fi
+          # "
+          
+          # 传输压缩包到服务器
+          echo "正在传输压缩包到服务器..."
+          scp -i ~/.ssh/id_rsa build.tar.gz ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/tmp/
+          
+          # 在服务器上解压并部署
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
+            echo '开始解压和部署...'
+            # 创建目标目录（如果不存在）
+            mkdir -p ${{ secrets.TARGET_DIR }}
+            # 解压到目标目录
+            tar -xzf /tmp/build.tar.gz -C ${{ secrets.TARGET_DIR }}/
+            # 删除压缩包
+            rm -f /tmp/build.tar.gz
+            echo '部署完成！'
+          "
+          
+          # 可选：清理旧备份（已注释）
+          # ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
+          #   ls -t ${{ secrets.TARGET_DIR }}.backup.* 2>/dev/null | tail -n +2 | xargs rm -rf
+          # "
+
+      - name: Cleanup SSH  # 清理 SSH 密钥
+        run: rm -rf ~/.ssh
