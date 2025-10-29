@@ -2,10 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import ProductCard, { ProductType } from "@/components/cards/ProductCard";
+import ProductCard from "@/components/cards/ProductCard";
 import AppPlaceholder from "@/components/shared/AppPlaceholder";
 
 import { getProducts } from "@/action/products.action";
+import { ProductType } from "@/lib/types";
 
 export default function HomePage() {
   const [products, setProducts] = useState<ProductType[]>([]);

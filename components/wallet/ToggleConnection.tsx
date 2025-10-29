@@ -19,7 +19,7 @@ export default function ToggleConnection() {
 
   // 处理登录
   const handleLogin = async () => {
-    if (!connected || !publicKey || walletAddress) return;
+    if (!publicKey || !connected || !signMessage || walletAddress) return;
 
     setIsBtnLoading(true);
 

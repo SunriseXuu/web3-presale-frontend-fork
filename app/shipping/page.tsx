@@ -4,11 +4,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 
-import ShippingCard, { ShippingAddressType } from "@/components/cards/ShippingCard";
-import AddShippingForm from "@/components/forms/AddShippingForm";
+import ShippingCard from "@/components/cards/ShippingCard";
+import AddShippingDrawer from "@/components/drawers/AddShippingDrawer";
 import AppPlaceholder from "@/components/shared/AppPlaceholder";
 
 import { getShippingAddresses } from "@/action/shipping.action";
+import { ShippingAddressType } from "@/lib/types";
 
 export default function ShippingPage() {
   const [defaultAddress, setDefaultAddress] = useState<ShippingAddressType | null>(null);
@@ -62,7 +63,7 @@ export default function ShippingPage() {
           />
         </div>
         <p className="font-bold">Shipping Addresses</p>
-        <AddShippingForm />
+        <AddShippingDrawer />
       </section>
 
       <section className="flex flex-col px-4 gap-4">

@@ -11,7 +11,7 @@ import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "@/components/
 
 import { updateShippingAddress, deleteShippingAddress } from "@/action/shipping.action";
 
-export default function UpdateShippingForm({
+export default function UpdateShippingDrawer({
   id,
   dName,
   dPhone,

@@ -9,23 +9,7 @@ import CountdownTimer from "@/components/shared/CountdownTimer";
 
 import { payWithSolana } from "@/lib/tools/solana";
 import { USD_DECIMALS } from "@/lib/constants";
-
-export type OrderType = {
-  order_id: string;
-  product_id: string;
-  product_snapshot: {
-    name: string;
-    images: string[];
-    price: number;
-    payment_address: string;
-  };
-  quantity: number;
-  total_price: number;
-  status: string;
-  created_at: string;
-  updated_at: string;
-  cancelled_at?: string;
-};
+import { OrderType } from "@/lib/types";
 
 export default function OrderCard({
   order_id,

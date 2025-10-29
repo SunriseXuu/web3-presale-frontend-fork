@@ -11,7 +11,7 @@ import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "@/components/
 
 import { createShippingAddress } from "@/action/shipping.action";
 
-export default function AddShippingForm() {
+export default function AddShippingDrawer() {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
 
   // 处理添加收货地址逻辑

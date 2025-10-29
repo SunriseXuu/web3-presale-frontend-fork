@@ -4,11 +4,13 @@ import { useEffect, useState, useRef, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import OrderCard, { OrderType } from "@/components/cards/OrderCard";
+import OrderCard from "@/components/cards/OrderCard";
 import AppPlaceholder from "@/components/shared/AppPlaceholder";
 
 import { getOrders } from "@/action/orders.action";
+
 import { orderStatusMap } from "@/lib/constants";
+import { OrderType } from "@/lib/types";
 
 function OrdersPageContent() {
   const [orders, setOrders] = useState<OrderType[]>([]);

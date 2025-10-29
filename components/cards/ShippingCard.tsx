@@ -1,12 +1,5 @@
-import UpdateShippingForm from "@/components/forms/UpdateShippingForm";
-
-export type ShippingAddressType = {
-  id: string;
-  name: string;
-  phone: string;
-  address: string;
-  is_default?: boolean;
-};
+import UpdateShippingDrawer from "@/components/drawers/UpdateShippingDrawer";
+import { ShippingAddressType } from "@/lib/types";
 
 export default function ShippingCard({ id, name, phone, address, is_default }: ShippingAddressType) {
   const dValue = {
@@ -28,7 +21,7 @@ export default function ShippingCard({ id, name, phone, address, is_default }: S
         </div>
       </div>
 
-      <UpdateShippingForm {...dValue} />
+      <UpdateShippingDrawer {...dValue} />
     </div>
   );
 }
