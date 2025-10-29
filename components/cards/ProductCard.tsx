@@ -99,11 +99,18 @@ export default function ProductCard({ id, name, description, price, images }: Pr
   const handlePurchase = async () => {
     setIsBtnLoading(true);
 
-    const {
-      data: order,
-      success,
-      error,
-    } = await createOrder({ product_id: id, quantity, shopping_info: selectedAddress });
+    const reqBody = selectedAddress
+      ? {
+          product_id: id,
+          quantity,
+          shipping_info: {
+            name: selectedAddress.name,
+            phone: selectedAddress.phone,
+            address: selectedAddress.address,
+          },
+        }
+      : { product_id: id, quantity };
+    const { data: order, success, error } = await createOrder(reqBody);
     if (!success) {
       if (error?.message) toast.error(error.message);
       else {
@@ -125,7 +132,7 @@ export default function ProductCard({ id, name, description, price, images }: Pr
         buyer: publicKey,
         connection,
       });
-      
+
       toast.success("Product purchased. Check out your order page later.");
     } catch (err: unknown) {
       const errMsg = (err as Error).message;

@@ -20,7 +20,7 @@ export const getOrderById = async (id: string) =>
 export const createOrder = async (reqBody: {
   product_id: string;
   quantity: number;
-  shopping_info?: {
+  shipping_info?: {
     name: string;
     phone: string;
     address: string;
