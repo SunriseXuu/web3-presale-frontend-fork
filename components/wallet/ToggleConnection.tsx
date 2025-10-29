@@ -1,31 +1,45 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import bs58 from "bs58";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import toast from "react-hot-toast";
 
-import { getCurrentUser } from "@/action/users.action";
-import { loginWithSolana, logout } from "@/lib/tools/solana";
+import { getUserNonce, loginUser } from "@/action/users.action";
+import { AUTH_STORE, USER_STORE } from "@/lib/constants";
 
 export default function ToggleConnection() {
   const [walletAddress, setWalletAddress] = useState<string>("");
   const [isBtnLoading, setIsBtnLoading] = useState<boolean>(false);
+  const [isInitted, setIsInitted] = useState<boolean>(false); // 初始化标志
 
-  // 获取当前登录用户信息
-  const fetchUser = async () => {
-    const user = await getCurrentUser();
-
-    if (user) setWalletAddress(user.wallet_address);
-    else setWalletAddress("");
-  };
+  const { publicKey, signMessage, connected, disconnect } = useWallet();
+  const { setVisible } = useWalletModal();
 
   // 处理登录
   const handleLogin = async () => {
+    if (!connected || !publicKey || walletAddress) return;
+
     setIsBtnLoading(true);
 
     try {
-      const user = await loginWithSolana();
+      const wltAddr = publicKey.toString();
 
-      const wltAddr = (user as { wallet_address: string }).wallet_address;
+      // 1. 获取 nonce 和 message
+      const { data: nonceRes, success: nonceSuccess } = await getUserNonce({ wallet_address: wltAddr });
+      if (!nonceSuccess) throw new Error("Failed to get nonce.");
+      const message = nonceRes.message;
+
+      // 2. 签名消息
+      const encoded = new TextEncoder().encode(message);
+      const signatureRaw = await signMessage(encoded);
+      const signature = bs58.encode(signatureRaw);
+
+      // 3. 登录
+      const { success } = await loginUser({ wallet_address: wltAddr, signature });
+      if (!success) throw new Error("Failed to log in.");
+
       setWalletAddress(wltAddr);
 
       toast.success("Wallet connected.");
@@ -39,18 +53,39 @@ export default function ToggleConnection() {
     setIsBtnLoading(false);
   };
 
-  // 处理登出
-  const handleLogout = async () => {
-    await logout();
-    toast.success("Wallet disconnected.");
-
-    await fetchUser();
-  };
-
   // 组件加载时获取用户信息
   useEffect(() => {
-    fetchUser();
+    (async () => {
+      const userStore = localStorage.getItem(USER_STORE);
+
+      if (userStore) {
+        const user = JSON.parse(decodeURIComponent(userStore));
+
+        if (user) setWalletAddress(user.wallet_address);
+        else setWalletAddress("");
+      }
+
+      setIsInitted(true);
+    })();
   }, []);
+
+  // 钱包连接成功后自动执行登录流程
+  useEffect(() => {
+    if (!isInitted) return; // 如果未初始化完成则不执行 - 通过等待walletAddress状态避免重复调用
+    handleLogin();
+  }, [isInitted, connected]);
+
+  // 处理登出
+  const handleLogout = () => {
+    disconnect();
+
+    localStorage.removeItem(AUTH_STORE);
+    localStorage.removeItem(USER_STORE);
+
+    setWalletAddress("");
+
+    toast.success("Wallet disconnected.");
+  };
 
   // 已连接钱包地址则显示地址
   if (walletAddress)
@@ -73,13 +108,12 @@ export default function ToggleConnection() {
       </div>
     );
 
-  // 未连接则显示连接按钮
   return (
     <button
       className="w-full flex justify-center items-center bg-primary disabled:bg-primary/25 font-semibold rounded-xl select-none cursor-pointer py-2.5 gap-2"
       type="button"
       disabled={isBtnLoading}
-      onClick={handleLogin}
+      onClick={() => setVisible(true)}
     >
       {isBtnLoading && <img className="animate-spin" src="/loading.svg" alt="Loading" width={16} height={16} />}
       <span>{isBtnLoading ? "Connecting..." : "Connect Wallet"}</span>

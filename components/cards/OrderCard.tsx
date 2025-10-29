@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useWallet, useConnection, useAnchorWallet } from "@solana/wallet-adapter-react";
 import toast from "react-hot-toast";
 
 import CountdownTimer from "@/components/shared/CountdownTimer";
@@ -39,6 +40,10 @@ export default function OrderCard({
 
   const router = useRouter();
 
+  const { publicKey } = useWallet();
+  const { connection } = useConnection();
+  const wallet = useAnchorWallet();
+
   // 对 pending 状态的订单可以继续支付
   const handlePayNow = async () => {
     setIsBtnLoading(true);
@@ -49,6 +54,9 @@ export default function OrderCard({
         productId: product_id,
         price: product_snapshot.price,
         quantity,
+        buyerWallet: wallet,
+        buyer: publicKey,
+        connection,
       });
       toast.success("Order paid.");
 
@@ -58,7 +66,7 @@ export default function OrderCard({
 
       if (errMsg.includes("Simulation failed")) toast.error("This transaction has already been processed.");
       else if (errMsg.includes("User rejected the request.")) toast.error("Request rejected.");
-      else toast.error((err as Error).message);
+      else toast.error((err as Error).message || "Transaction failed.");
     }
 
     setIsBtnLoading(false);

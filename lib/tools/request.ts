@@ -55,27 +55,35 @@ const requestHandler = async ({
 
     return data;
   } catch (error: unknown) {
-    // 类型守卫，判断 error 是否为 AxiosError
-    if (
-      typeof error === "object" &&
-      error !== null &&
-      "response" in error &&
-      (error as { response?: unknown }).response
-    )
+    // axios 错误类型守卫
+    if (typeof error === "object" && error !== null && "isAxiosError" in error && (error as any).isAxiosError) {
+      const err = error as any;
+      const status = err.response?.status;
+      let message = err.response?.data?.message || "Request failed.";
+
+      if (status === 500) message = "Internal server error.";
+      else if (status === 408 || err.code === "ECONNABORTED") message = "Request timed out.";
+      else if (status === 404) message = "API not found.";
+      else if (status === 401) message = "Unauthorized access.";
+      else if (status === 403) message = "Forbidden access.";
+
       return {
         id: "",
         success: false,
-        data: { message: "Request failed" },
+        data: { message },
         error: {
-          message: (error as { response: { data: { message?: string } } }).response.data.message,
+          code: err.code,
+          message,
         },
       };
+    }
 
+    // 其他未知错误
     return {
       id: "",
       success: false,
-      data: { message: "Unknown error occurred" },
-      error: { message: typeof error === "string" ? error : undefined },
+      data: { message: "Unknown error occurred." },
+      error: { message: typeof error === "string" ? error : "Unknown error occurred." },
     };
   }
 };

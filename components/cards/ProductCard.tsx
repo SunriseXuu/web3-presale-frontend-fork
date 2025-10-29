@@ -1,11 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useWallet, useConnection, useAnchorWallet } from "@solana/wallet-adapter-react";
 import toast from "react-hot-toast";
 
 import { OrderType } from "@/components/cards/OrderCard";
 import { ShippingAddressType } from "@/components/cards/ShippingCard";
+import AppPlaceholder from "@/components/shared/AppPlaceholder";
 import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 
 import { createOrder } from "@/action/orders.action";
@@ -13,8 +16,6 @@ import { getShippingAddresses } from "@/action/shipping.action";
 
 import { payWithSolana } from "@/lib/tools/solana";
 import { USD_DECIMALS } from "@/lib/constants";
-import AppPlaceholder from "../shared/AppPlaceholder";
-import Link from "next/link";
 
 export type ProductType = {
   id: string;
@@ -90,6 +91,10 @@ export default function ProductCard({ id, name, description, price, images }: Pr
 
   const router = useRouter();
 
+  const { publicKey } = useWallet();
+  const { connection } = useConnection();
+  const wallet = useAnchorWallet();
+
   // 处理购买逻辑
   const handlePurchase = async () => {
     setIsBtnLoading(true);
@@ -116,7 +121,11 @@ export default function ProductCard({ id, name, description, price, images }: Pr
         productId: (order as OrderType).product_id,
         price: (order as OrderType).product_snapshot.price,
         quantity,
+        buyerWallet: wallet,
+        buyer: publicKey,
+        connection,
       });
+      
       toast.success("Product purchased. Check out your order page later.");
     } catch (err: unknown) {
       const errMsg = (err as Error).message;
@@ -124,7 +133,7 @@ export default function ProductCard({ id, name, description, price, images }: Pr
       if (errMsg.includes("Simulation failed")) toast.error("This transaction has already been processed.");
       else if (errMsg.includes("User rejected the request."))
         toast.error("Order placed but request rejected. Complete the payment in your order page later.");
-      else toast.error((err as Error).message);
+      else toast.error((err as Error).message || "Transaction failed. Complete the payment in your order page later.");
 
       setIsBtnLoading(false);
       return;
@@ -142,16 +151,20 @@ export default function ProductCard({ id, name, description, price, images }: Pr
     (async () => {
       setIsAddressFetching(true);
 
-      const { data: shippinAddressesData, success } = await getShippingAddresses();
+      const { data: shippingAddressesData, success, error } = await getShippingAddresses();
       if (!success) {
-        toast.error("Please connect your wallet first.");
+        if (error?.message) toast.error(error.message);
+        else {
+          toast.error("Please connect your wallet first.");
+          router.push("/me");
+        }
+
         setIsAddressFetching(false);
         setIsShippingDrawerOpen(false);
-        router.push("/me");
         return;
       }
 
-      const shAddrs = (shippinAddressesData as unknown as ShippingAddressType[]) || [];
+      const shAddrs = (shippingAddressesData as unknown as ShippingAddressType[]) || [];
 
       // 分离出默认地址
       const defaultAddr = shAddrs.find((addr) => addr.is_default);
@@ -330,7 +343,7 @@ export default function ProductCard({ id, name, description, price, images }: Pr
               <button
                 className="w-full flex justify-center items-center bg-primary disabled:bg-primary/25 font-semibold rounded-lg cursor-pointer select-none py-2.5 gap-3"
                 type="button"
-                disabled={isBtnLoading}
+                disabled={!selectedAddress || isBtnLoading}
                 onClick={handlePurchase}
               >
                 {isBtnLoading && (
