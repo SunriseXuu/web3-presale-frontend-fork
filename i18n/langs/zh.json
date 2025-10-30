@@ -1,0 +1,106 @@
+{
+  "pages": {
+    "home": {
+      "title": "MyShop - 您所需的唯一的Web3预售平台",
+      "loadingInfo": "正在加载产品...",
+      "loadingMore": "正在加载更多产品...",
+      "noMore": "没有更多产品了",
+      "notFound": "未找到产品"
+    },
+    "me": {
+      "myOrders": "我的订单",
+      "viewAll": "查看全部",
+      "pending": "待支付",
+      "paid": "已支付",
+      "cancelled": "已取消",
+      "settings": "设置",
+      "shippings": "收货地址",
+      "langs": "语言设置",
+      "help": "帮助中心"
+    },
+    "shipping": {
+      "title": "收货地址",
+      "default": "默认地址",
+      "others": "其他地址",
+      "connectErr": "请先连接您的钱包",
+      "loadingDefault": "正在加载默认收货地址...",
+      "defaultNotFound": "未找到默认收货地址",
+      "loadingOthers": "正在加载其他收货地址...",
+      "othersNotFound": "未找到其他收货地址"
+    },
+    "help": {
+      "title": "帮助中心",
+      "process": "购买流程",
+      "processOne": "连接您最喜欢的Solana钱包，例如Phantom。",
+      "processTwo": "浏览并选择可供预售的产品。",
+      "processThree": "使用您连接的钱包完成付款。",
+      "processFour": "享受送货上门的产品！",
+      "faqs": "常见问题",
+      "faqOneQ": "如何连接我的钱包？",
+      "faqTwoQ": "接受哪些支付方式？",
+      "faqThreeQ": "运输需要多长时间？",
+      "faqOneA": "点击“连接钱包”按钮，按照提示连接您的钱包。",
+      "faqTwoA": "我们目前接受通过Solana钱包（如Phantom）进行的USDC/USDT支付。",
+      "faqThreeA": "运输时间可能会有所不同，但我们努力尽快将产品送达您手中。"
+    }
+  },
+  "shared": {
+    "tabbar": {
+      "home": "首页",
+      "me": "我的"
+    },
+    "countdown": {
+      "cancelled": "已取消",
+      "left": "剩余"
+    }
+  },
+  "drawers": {
+    "addShipping": {
+      "triggerText": "添加",
+      "title": "添加新收货地址",
+      "recipientLabel": "收件人姓名",
+      "phoneLabel": "电话号码",
+      "addressLabel": "地址",
+      "defaultLabel": "设为默认",
+      "recipientPlaceholder": "例如：张三",
+      "phonePlaceholder": "例如：+1 234 567 890",
+      "addressPlaceholder": "例如：123 大街，城市，国家",
+      "btnText": "添加",
+      "btnPendingText": "添加中...",
+      "addErr": "添加收货地址失败",
+      "added": "已添加新收货地址"
+    },
+    "selectShipping": {
+      "title": "选择收货地址",
+      "connectErr": "请先连接您的钱包",
+      "loading": "正在加载收货地址...",
+      "notFound": "未找到收货地址",
+      "goAdd": "去添加"
+    },
+    "updateShipping": {
+      "title": "更新收货地址",
+      "recipientLabel": "收件人姓名",
+      "phoneLabel": "电话号码",
+      "addressLabel": "地址",
+      "defaultLabel": "设为默认",
+      "recipientPlaceholder": "例如：张三",
+      "phonePlaceholder": "例如：+1 234 567 890",
+      "addressPlaceholder": "例如：123 大街，城市，国家",
+      "btnText": "更新",
+      "btnPendingText": "更新中...",
+      "updateErr": "更新收货地址失败",
+      "updated": "收货地址已更新",
+      "deleteErr": "删除收货地址失败",
+      "deleted": "收货地址已删除"
+    }
+  },
+  "wallet": {
+    "connectWallet": "连接钱包",
+    "connecting": "连接中...",
+    "connected": "钱包已连接",
+    "disconnected": "钱包已断开连接",
+    "nonceErr": "无法获取nonce，请重试",
+    "loginErr": "钱包登录失败，请重试",
+    "rejected": "已拒绝钱包连接"
+  }
+}

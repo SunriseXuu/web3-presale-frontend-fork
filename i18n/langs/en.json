@@ -1,0 +1,106 @@
+{
+  "pages": {
+    "home": {
+      "title": "MyShop - The Only Web3 Presale Platform You Need",
+      "loadingInfo": "Loading products...",
+      "loadingMore": "Loading more products...",
+      "noMore": "No more products",
+      "notFound": "No products found"
+    },
+    "me": {
+      "myOrders": "My Orders",
+      "viewAll": "View All",
+      "pending": "Pending",
+      "paid": "Paid",
+      "cancelled": "Cancelled",
+      "settings": "Settings",
+      "shippings": "Shipping Addresses",
+      "langs": "Language Settings",
+      "help": "Help Center"
+    },
+    "shipping": {
+      "title": "Shipping Addresses",
+      "default": "Default Address",
+      "others": "Other Addresses",
+      "connectErr": "Please connect your wallet first",
+      "loadingDefault": "Loading default shipping address...",
+      "defaultNotFound": "No default shipping address found",
+      "loadingOthers": "Loading other shipping addresses...",
+      "othersNotFound": "No other shipping addresses found"
+    },
+    "help": {
+      "title": "Help Center",
+      "process": "Purchase Process",
+      "processOne": "Connect your favorite Solana wallet, such as Phantom.",
+      "processTwo": "Browse and select products available for presale.",
+      "processThree": "Complete the payment using your connected wallet.",
+      "processFour": "Enjoy your products delivered to your doorstep!",
+      "faqs": "FAQs",
+      "faqOneQ": "How do I connect my wallet?",
+      "faqTwoQ": "What payment methods are accepted?",
+      "faqThreeQ": "How long does shipping take?",
+      "faqOneA": "Click on the 'Connect Wallet' button and follow the prompts to link your wallet.",
+      "faqTwoA": "We currently accept payments in USDC/USDT via Solana wallets like Phantom.",
+      "faqThreeA": "Shipping times may vary, but we strive to deliver your products as quickly as possible."
+    }
+  },
+  "shared": {
+    "tabbar": {
+      "home": "Home",
+      "me": "Me"
+    },
+    "countdown": {
+      "cancelled": "Cancelled",
+      "left": "Left"
+    }
+  },
+  "drawer": {
+    "addShipping": {
+      "triggerText": "Add",
+      "title": "Add New Shipping Address",
+      "recipientLabel": "Recipient name",
+      "phoneLabel": "Phone number",
+      "addressLabel": "Address",
+      "defaultLabel": "Set as default",
+      "recipientPlaceholder": "e.g. John Doe",
+      "phonePlaceholder": "e.g. +1 234 567 890",
+      "addressPlaceholder": "e.g. 123 Main St, City, Country",
+      "btnText": "Add",
+      "btnPendingText": "Adding...",
+      "addErr": "Failed to add shipping address",
+      "added": "New shipping address added"
+    },
+    "selectShipping": {
+      "title": "Select Shipping Address",
+      "connectErr": "Please connect your wallet first",
+      "loading": "Loading shipping addresses...",
+      "notFound": "No shipping addresses found",
+      "goAdd": "Go add one"
+    },
+    "updateShipping": {
+      "title": "Update Shipping Address",
+      "recipientLabel": "Recipient name",
+      "phoneLabel": "Phone number",
+      "addressLabel": "Address",
+      "defaultLabel": "Set as default",
+      "recipientPlaceholder": "e.g. John Doe",
+      "phonePlaceholder": "e.g. +1 234 567 890",
+      "addressPlaceholder": "e.g. 123 Main St, City, Country",
+      "btnText": "Update",
+      "btnPendingText": "Updating...",
+      "updateErr": "Failed to update shipping address",
+      "updated": "Shipping address updated",
+      "deleteErr": "Failed to delete shipping address",
+      "deleted": "Shipping address deleted"
+    }
+  },
+  "wallet": {
+    "connectWallet": "Connect Wallet",
+    "connecting": "Connecting...",
+    "connected": "Wallet connected",
+    "disconnected": "Wallet disconnected",
+    "nonceErr": "Failed to get nonce, please try again",
+    "loginErr": "Wallet login failed, please try again",
+    "rejected": "Wallet connection rejected"
+  }
+}
