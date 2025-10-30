@@ -1,7 +1,7 @@
 {
   "pages": {
     "home": {
-      "title": "MyShop - 您所需的唯一的Web3预售平台",
+      "title": "MyShop - 您唯一所需的Web3预售平台",
       "loadingInfo": "正在加载产品...",
       "loadingMore": "正在加载更多产品...",
       "noMore": "没有更多产品了",
@@ -17,6 +17,17 @@
       "shippings": "收货地址",
       "langs": "语言设置",
       "help": "帮助中心"
+    },
+    "orders": {
+      "title": "我的订单",
+      "filterAll": "全部",
+      "filterPending": "待支付",
+      "filterPaid": "已支付",
+      "filterCancelled": "已取消",
+      "loadingInfo": "正在加载订单...",
+      "loadingMore": "正在加载更多订单...",
+      "noMore": "没有更多订单了",
+      "notFound": "未找到订单"
     },
     "shipping": {
       "title": "收货地址",
@@ -54,7 +65,29 @@
       "left": "剩余"
     }
   },
+  "cards": {
+    "address": {
+      "defaultTag": "默认地址",
+      "placeholder": "选择收货地址"
+    },
+    "shipping": {
+      "defaultTag": "默认地址"
+    }
+  },
   "drawers": {
+    "product": {
+      "title": "查看您的订单",
+      "unitPrice": "产品单价",
+      "currency": "选择货币",
+      "amount": "购买数量",
+      "btnText": "立即购买",
+      "connectErr": "请先连接您的钱包",
+      "purchased": "产品已购买，请稍后查看您的订单页面",
+      "insufficientErr": "余额不足，请为您的钱包充值",
+      "simulationErr": "该交易已被处理",
+      "rejectedErr": "已下单，但请求被拒绝，请稍后在您的订单页面完成付款",
+      "txErr": "交易失败，请稍后在您的订单页面完成付款"
+    },
     "addShipping": {
       "triggerText": "添加",
       "title": "添加新收货地址",

@@ -1,9 +1,38 @@
-import Link from "next/link";
+"use client";
 
-import ToggleConnection from "@/components/wallet/ToggleConnection";
-import { orderEntry } from "@/lib/constants";
+import Link from "next/link";
+import { useTranslation } from "react-i18next";
+
+import ConnectButton from "@/components/wallet/ConnectButton";
 
 export default function page() {
+  const { t } = useTranslation();
+
+  // 订单入口常量
+  const orderEntry = [
+    {
+      href: "/orders?status=pending",
+      icon: "/pending-payment.svg",
+      alt: "PENDING",
+      label: t("pages.me.pending"),
+      size: 31,
+    },
+    {
+      href: "/orders?status=paid",
+      icon: "/paid.svg",
+      alt: "PAID",
+      label: t("pages.me.paid"),
+      size: 30,
+    },
+    {
+      href: "/orders?status=cancelled",
+      icon: "/cancelled.svg",
+      alt: "CANCELLED",
+      label: t("pages.me.cancelled"),
+      size: 27,
+    },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col pb-6 gap-6">
       <section>
@@ -11,7 +40,7 @@ export default function page() {
 
         <div className="flex items-center -mt-1 px-4 gap-6">
           <img className="w-20 h-20 rounded-full" src="/avatar.jpg" alt="Avatar" width={80} height={80} />
-          <ToggleConnection />
+          <ConnectButton />
         </div>
       </section>
 
@@ -19,9 +48,9 @@ export default function page() {
 
       <section className="flex flex-col px-4 gap-4">
         <div className="flex justify-between items-center">
-          <h3 className="text-lg font-bold">My Orders</h3>
+          <h3 className="text-lg font-bold">{t("pages.me.myOrders")}</h3>
           <Link className="flex items-center" href="/orders">
-            <span className=" text-sm text-primary">View All</span>
+            <span className=" text-sm text-primary">{t("pages.me.viewAll")}</span>
             <img className="w-4 h-4" src="/chevron-right.svg" alt="ChevronRight" width={16} height={16} />
           </Link>
         </div>
@@ -37,23 +66,23 @@ export default function page() {
       </section>
 
       <section className="flex flex-col px-4 gap-4">
-        <h3 className="text-lg font-bold">Settings</h3>
+        <h3 className="text-lg font-bold">{t("pages.me.settings")}</h3>
 
         <div className="flex flex-col bg-neutral rounded-xl px-6 py-5 gap-4">
           <Link className="flex justify-between items-center" href="/shipping">
-            <span className="text-sm">Shipping Addresses</span>
+            <span className="text-sm">{t("pages.me.shippings")}</span>
             <img className="w-4 h-4" src="/chevron-r.svg" alt="ChevronR" width={16} height={16} />
           </Link>
           <hr className="border-zinc-600" />
 
           <Link className="flex justify-between items-center" href="/language">
-            <span className="text-sm">Language Settings</span>
+            <span className="text-sm">{t("pages.me.langs")}</span>
             <img className="w-4 h-4" src="/chevron-r.svg" alt="ChevronR" width={16} height={16} />
           </Link>
           <hr className="border-zinc-600" />
 
           <Link className="flex justify-between items-center" href="/help">
-            <span className="text-sm">Help Center</span>
+            <span className="text-sm">{t("pages.me.help")}</span>
             <img className="w-4 h-4" src="/chevron-r.svg" alt="ChevronR" width={16} height={16} />
           </Link>
         </div>

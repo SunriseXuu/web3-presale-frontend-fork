@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import ProductCard from "@/components/cards/ProductCard";
 import AppPlaceholder from "@/components/shared/AppPlaceholder";
@@ -15,6 +16,8 @@ export default function HomePage() {
 
   const totalPageRef = useRef<number>(1); // 防止拉取超过总页数的页面
   const fetchedLatestPageRef = useRef<number>(0); // 防止重复拉取已经拉取过的页面
+
+  const { t } = useTranslation();
 
   // 获取产品列表
   const fetchProducts = async () => {
@@ -63,11 +66,9 @@ export default function HomePage() {
         />
         <div className="absolute inset-x-0 top-1/3 bottom-0 bg-linear-to-t from-black to-transparent" />
 
-        <div className="absolute inset-x-4 bottom-4 flex flex-col gap-2">
-          <h1 className="text-2xl font-bold leading-tight drop-shadow">
-            MyShop - The Only Web3 Presale Platform You Need
-          </h1>
-        </div>
+        <h1 className="absolute inset-x-4 bottom-4 text-2xl font-bold leading-tight drop-shadow">
+          {t("pages.home.title")}
+        </h1>
       </section>
 
       <section className="flex flex-col px-4 gap-4">
@@ -78,16 +79,16 @@ export default function HomePage() {
         </div>
 
         <AppPlaceholder
-          text={products.length > 0 ? "Loading more products..." : "Loading products..."}
+          text={products.length > 0 ? t("pages.home.loadingMore") : t("pages.home.loadingInfo")}
           mode="loading"
           isShow={isFetching}
         />
         <AppPlaceholder
-          text="No more products to load"
+          text={t("pages.home.noMore")}
           mode="normal"
           isShow={products.length > 0 && currPage > totalPageRef.current && !isFetching}
         />
-        <AppPlaceholder text="No products found" mode="normal" isShow={products.length === 0 && !isFetching} />
+        <AppPlaceholder text={t("pages.home.notFound")} mode="normal" isShow={products.length === 0 && !isFetching} />
       </section>
     </div>
   );

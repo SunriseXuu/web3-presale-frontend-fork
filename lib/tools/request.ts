@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { AUTH_STORE } from "@/lib/constants";
+import { AUTH_STORE } from "@/lib/configs";
 
 type ResponseType = {
   id: string;

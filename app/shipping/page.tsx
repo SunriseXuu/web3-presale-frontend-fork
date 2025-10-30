@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-hot-toast";
 
 import ShippingCard from "@/components/cards/ShippingCard";
@@ -18,6 +19,8 @@ export default function ShippingPage() {
 
   const router = useRouter();
 
+  const { t } = useTranslation();
+
   // 获取收货地址列表
   const fetchShippingAddresses = async () => {
     if (isFetching) return;
@@ -25,7 +28,7 @@ export default function ShippingPage() {
 
     const { data: shippinAddressesData, success } = await getShippingAddresses();
     if (!success) {
-      toast.error("Please connect your wallet first.");
+      toast.error(t("pages.shipping.connectErr"));
       setIsFetching(false);
       router.push("/me");
       return;
@@ -62,37 +65,37 @@ export default function ShippingPage() {
             onClick={() => router.back()}
           />
         </div>
-        <p className="font-bold">Shipping Addresses</p>
+        <p className="font-bold">{t("pages.shipping.title")}</p>
         <AddShippingDrawer />
       </section>
 
       <section className="flex flex-col px-4 gap-4">
-        <h1 className="text-2xl font-bold">Default</h1>
+        <h1 className="text-2xl font-bold">{t("pages.shipping.default")}</h1>
 
         {defaultAddress && <ShippingCard {...defaultAddress} />}
 
         <AppPlaceholder
-          text="Loading default shipping address..."
+          text={t("pages.shipping.loadingDefault")}
           mode="loading"
           isShow={!defaultAddress && isFetching}
         />
         <AppPlaceholder
-          text="No default shipping address found"
+          text={t("pages.shipping.defaultNotFound")}
           mode="normal"
           isShow={!defaultAddress && !isFetching}
         />
       </section>
 
       <section className="flex flex-col px-4 gap-4">
-        <h1 className="text-2xl font-bold">Others</h1>
+        <h1 className="text-2xl font-bold">{t("pages.shipping.others")}</h1>
 
         {otherAddresses.map((addr) => (
           <ShippingCard key={addr.id} {...addr} />
         ))}
 
-        <AppPlaceholder text="Loading shipping addresses..." mode="loading" isShow={isFetching} />
+        <AppPlaceholder text={t("pages.shipping.loadingOthers")} mode="loading" isShow={isFetching} />
         <AppPlaceholder
-          text="No shipping address found"
+          text={t("pages.shipping.othersNotFound")}
           mode="normal"
           isShow={otherAddresses.length === 0 && !isFetching}
         />

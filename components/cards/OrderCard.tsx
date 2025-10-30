@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import CountdownTimer from "@/components/shared/CountdownTimer";
 
 import { payWithSolana } from "@/lib/tools/solana";
-import { USD_DECIMALS } from "@/lib/constants";
+import { USD_DECIMALS } from "@/lib/configs";
 import { OrderType } from "@/lib/types";
 
 export default function OrderCard({

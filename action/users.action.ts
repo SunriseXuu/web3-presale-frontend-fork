@@ -1,5 +1,5 @@
 import requestHandler from "@/lib/tools/request";
-import { AUTH_STORE, USER_STORE } from "@/lib/constants";
+import { AUTH_STORE, USER_STORE } from "@/lib/configs";
 
 // 获取用户 nonce - 检查用户是否存在，不存在则创建新用户，生成/返回nonce
 export const getUserNonce = async (query: { wallet_address: string }) =>

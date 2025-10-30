@@ -2,17 +2,20 @@
 
 import { useEffect, useState } from "react";
 import bs58 from "bs58";
+import { useTranslation } from "react-i18next";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import toast from "react-hot-toast";
 
 import { getUserNonce, loginUser } from "@/action/users.action";
-import { AUTH_STORE, USER_STORE } from "@/lib/constants";
+import { AUTH_STORE, USER_STORE } from "@/lib/configs";
 
-export default function ToggleConnection() {
+export default function ConnectButton() {
   const [walletAddress, setWalletAddress] = useState<string>("");
   const [isBtnLoading, setIsBtnLoading] = useState<boolean>(false);
   const [isInitted, setIsInitted] = useState<boolean>(false); // 初始化标志
+
+  const { t } = useTranslation();
 
   const { publicKey, signMessage, connected, disconnect } = useWallet();
   const { setVisible } = useWalletModal();
@@ -28,7 +31,7 @@ export default function ToggleConnection() {
 
       // 1. 获取 nonce 和 message
       const { data: nonceRes, success: nonceSuccess } = await getUserNonce({ wallet_address: wltAddr });
-      if (!nonceSuccess) throw new Error("Failed to get nonce.");
+      if (!nonceSuccess) throw new Error(t("wallet.nonceErr"));
       const message = nonceRes.message;
 
       // 2. 签名消息
@@ -38,15 +41,15 @@ export default function ToggleConnection() {
 
       // 3. 登录
       const { success } = await loginUser({ wallet_address: wltAddr, signature });
-      if (!success) throw new Error("Failed to log in.");
+      if (!success) throw new Error(t("wallet.loginErr"));
 
       setWalletAddress(wltAddr);
 
-      toast.success("Wallet connected.");
+      toast.success(t("wallet.connected"));
     } catch (err: unknown) {
       const errMsg = (err as Error).message;
 
-      if (errMsg.includes("User rejected the request.")) toast.error("Request rejected.");
+      if (errMsg.includes("User rejected the request.")) toast.error(t("wallet.rejected"));
       else toast.error((err as Error).message);
     }
 
@@ -84,7 +87,7 @@ export default function ToggleConnection() {
 
     setWalletAddress("");
 
-    toast.success("Wallet disconnected.");
+    toast.success(t("wallet.disconnected"));
   };
 
   // 已连接钱包地址则显示地址
@@ -116,7 +119,7 @@ export default function ToggleConnection() {
       onClick={() => setVisible(true)}
     >
       {isBtnLoading && <img className="animate-spin" src="/loading.svg" alt="Loading" width={16} height={16} />}
-      <span>{isBtnLoading ? "Connecting..." : "Connect Wallet"}</span>
+      <span>{isBtnLoading ? t("wallet.connecting") : t("wallet.connectWallet")}</span>
     </button>
   );
 }

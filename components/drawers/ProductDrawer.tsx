@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { useWallet, useConnection, useAnchorWallet } from "@solana/wallet-adapter-react";
 import toast from "react-hot-toast";
 
@@ -11,7 +12,7 @@ import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "@/components/
 import { createOrder } from "@/action/orders.action";
 
 import { payWithSolana } from "@/lib/tools/solana";
-import { USD_DECIMALS } from "@/lib/constants";
+import { USD_DECIMALS } from "@/lib/configs";
 import { ProductType, OrderType, ShippingAddressType } from "@/lib/types";
 
 export default function ProductDrawer({
@@ -32,6 +33,8 @@ export default function ProductDrawer({
   const [isBtnLoading, setIsBtnLoading] = useState<boolean>(false);
 
   const router = useRouter();
+
+  const { t } = useTranslation();
 
   const { publicKey } = useWallet();
   const { connection } = useConnection();
@@ -56,7 +59,7 @@ export default function ProductDrawer({
     if (!success) {
       if (error?.message) toast.error(error.message);
       else {
-        toast.error("Please connect your wallet first.");
+        toast.error(t("drawers.product.connectErr"));
         router.push("/me");
       }
 
@@ -75,14 +78,17 @@ export default function ProductDrawer({
         connection,
       });
 
-      toast.success("Product purchased. Check out your order page later.");
+      toast.success(t("drawers.product.purchased"));
     } catch (err: unknown) {
       const errMsg = (err as Error).message;
 
-      if (errMsg.includes("Simulation failed")) toast.error("This transaction has already been processed.");
-      else if (errMsg.includes("User rejected the request."))
-        toast.error("Order placed but request rejected. Complete the payment in your order page later.");
-      else toast.error((err as Error).message || "Transaction failed. Complete the payment in your order page later.");
+      // 账户错误处理
+      if (errMsg === "Please connect your wallet first") toast.error(t("drawers.product.connectErr"));
+      else if (errMsg === "Insufficient balance") toast.error(t("drawers.product.insufficientErr"));
+      // 钱包端错误处理
+      else if (errMsg.includes("Simulation failed")) toast.error(t("drawers.product.simulationErr"));
+      else if (errMsg.includes("User rejected the request.")) toast.error(t("drawers.product.rejectedErr"));
+      else toast.error((err as Error).message || t("drawers.product.txErr"));
 
       setIsBtnLoading(false);
       return;
@@ -106,7 +112,7 @@ export default function ProductDrawer({
 
       <DrawerContent className="min-w-[350px] max-w-[450px] min-h-[200px] bg-surface border-none rounded-t-2xl! mx-auto">
         <div className="flex flex-col px-4 pt-4 pb-8 gap-5">
-          <DrawerTitle className="text-white text-xl font-semibold">Check Your Order</DrawerTitle>
+          <DrawerTitle className="text-white text-xl font-semibold">{t("drawers.product.title")}</DrawerTitle>
 
           <SelectShippingDrawer
             isProductDrawerOpen={isProductDrawerOpen}
@@ -131,7 +137,7 @@ export default function ProductDrawer({
 
             <div className="basis-2/3 flex flex-col items-start select-none gap-4">
               <div className="flex items-center">
-                <p className="w-20 text-sm text-zinc-400">Unit price</p>
+                <p className="w-20 text-sm text-zinc-400">{t("drawers.product.unitPrice")}</p>
 
                 <div className="flex items-end text-primary gap-px">
                   <img className="mb-0.5" src="/dollar2.svg" alt="DOLLAR" width={12} height={12} />
@@ -140,7 +146,7 @@ export default function ProductDrawer({
               </div>
 
               <div className="flex items-center">
-                <p className="w-20 text-sm text-zinc-400">Buy with</p>
+                <p className="w-20 text-sm text-zinc-400">{t("drawers.product.currency")}</p>
 
                 <div className="flex items-center leading-none gap-1">
                   <button
@@ -165,7 +171,7 @@ export default function ProductDrawer({
               </div>
 
               <div className="flex items-center">
-                <p className="w-20 text-sm text-zinc-400">Amount</p>
+                <p className="w-20 text-sm text-zinc-400">{t("drawers.product.amount")}</p>
 
                 <div className="flex items-center gap-1">
                   <button
@@ -208,7 +214,7 @@ export default function ProductDrawer({
               "Purchasing..."
             ) : (
               <>
-                <span className="font-medium">Buy Now</span>
+                <span className="font-medium">{t("drawers.product.btnText")}</span>
                 <span className="flex items-center gap-0.5">
                   <img src={currency === "USDC" ? "/usdc.svg" : "/usdt.svg"} alt="CURRENCY" width={18} height={18} />
                   <span className="font-medium">{((price * quantity) / USD_DECIMALS).toFixed(2)}</span>

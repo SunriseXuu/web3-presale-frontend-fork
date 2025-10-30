@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 
 import AddressCard from "@/components/cards/AddressCard";
@@ -25,6 +26,8 @@ export default function SelectShippingDrawer({
 
   const router = useRouter();
 
+  const { t } = useTranslation();
+
   useEffect(() => {
     if (!isProductDrawerOpen) return; // 未打开弹窗则不获取
     if (selectedAddr && shippingAddrs.length > 0) return; // 已经获取过地址则不再获取
@@ -36,7 +39,7 @@ export default function SelectShippingDrawer({
       if (!success) {
         if (error?.message) toast.error(error.message);
         else {
-          toast.error("Please connect your wallet first.");
+          toast.error(t("drawers.selectShipping.connectErr"));
           router.push("/me");
         }
 
@@ -70,7 +73,7 @@ export default function SelectShippingDrawer({
 
       <DrawerContent className="min-w-[350px] max-w-[450px] min-h-[200px] bg-surface border-none rounded-t-2xl! mx-auto">
         <div className="flex flex-col px-4 pt-4 pb-8 mb-8 gap-5">
-          <DrawerTitle className="text-white text-xl font-semibold">Select Shipping Address</DrawerTitle>
+          <DrawerTitle className="text-white text-xl font-semibold">{t("drawers.selectShipping.title")}</DrawerTitle>
 
           <div className="flex flex-col gap-4">
             {shippingAddrs.map((addr) => (
@@ -86,16 +89,16 @@ export default function SelectShippingDrawer({
               />
             ))}
 
-            <AppPlaceholder text="Loading shipping addresses..." mode="loading" isShow={isAddressFetching} />
+            <AppPlaceholder text={t("drawers.selectShipping.loading")} mode="loading" isShow={isAddressFetching} />
             <div className="flex flex-col items-center">
               <AppPlaceholder
-                text="No shipping address found"
+                text={t("drawers.selectShipping.notFound")}
                 mode="normal"
                 isShow={shippingAddrs.length === 0 && !isAddressFetching}
               />
               {shippingAddrs.length === 0 && !isAddressFetching && (
                 <Link href="/shipping" className="text-center text-primary border-b border-primary">
-                  Go add one
+                  {t("drawers.selectShipping.goAdd")}
                 </Link>
               )}
             </div>

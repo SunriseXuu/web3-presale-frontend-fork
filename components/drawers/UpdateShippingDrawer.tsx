@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 
 import AppInput from "@/components/ui/AppInput";
@@ -27,6 +28,8 @@ export default function UpdateShippingDrawer({
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
+  const { t } = useTranslation();
+
   // 处理更新收货地址逻辑
   const updateShippingAction = async (formData: FormData) => {
     const name = formData.get("name") as string;
@@ -36,10 +39,10 @@ export default function UpdateShippingDrawer({
 
     const { success } = await updateShippingAddress(id, { name, phone, address, is_default });
     if (!success) {
-      toast.error("Failed to update shipping address");
+      toast.error(t("drawers.updateShipping.updateErr"));
       return;
     }
-    toast.success("Shipping address updated.");
+    toast.success(t("drawers.updateShipping.updated"));
 
     setIsDrawerOpen(false);
     location.reload(); // TODO:
@@ -51,10 +54,10 @@ export default function UpdateShippingDrawer({
 
     const { success } = await deleteShippingAddress(id);
     if (!success) {
-      toast.error("Failed to delete shipping address");
+      toast.error(t("drawers.updateShipping.deleteErr"));
       return;
     }
-    toast.success("Shipping address deleted.");
+    toast.success(t("drawers.updateShipping.deleted"));
 
     setIsDeleting(false);
     location.reload(); // TODO:
@@ -68,36 +71,36 @@ export default function UpdateShippingDrawer({
 
       <DrawerContent className="min-w-[350px] max-w-[450px] min-h-[200px] bg-surface border-none rounded-t-2xl! mx-auto">
         <div className="flex flex-col px-4 pt-4 pb-8 gap-5">
-          <DrawerTitle className="text-white text-xl font-semibold">Update Shipping Address</DrawerTitle>
+          <DrawerTitle className="text-white text-xl font-semibold">{t("drawers.updateShipping.title")}</DrawerTitle>
 
           <form action={updateShippingAction} className="flex flex-col gap-4">
             <AppInput
               id="recipient_name"
-              label="Recipient Name"
+              label={t("drawers.updateShipping.recipientLabel")}
               name="name"
-              placeholder="e.g. John Doe"
+              placeholder={t("drawers.updateShipping.recipientPlaceholder")}
               defaultValue={dName}
               type="text"
             />
             <AppInput
               id="phone_number"
-              label="Phone Number"
+              label={t("drawers.updateShipping.phoneLabel")}
               name="phone"
-              placeholder="e.g. +1 234 567 890"
+              placeholder={t("drawers.updateShipping.phonePlaceholder")}
               defaultValue={dPhone}
               type="text"
             />
             <AppTextarea
               id="address"
-              label="Address"
+              label={t("drawers.updateShipping.addressLabel")}
               name="address"
-              placeholder="e.g. 123 Main St, City, Country"
+              placeholder={t("drawers.updateShipping.addressPlaceholder")}
               defaultValue={dAddress}
             />
-            <AppSwitcher label="Set as default" name="is_default" defaultChecked={dDefault} />
+            <AppSwitcher label={t("drawers.updateShipping.defaultLabel")} name="is_default" defaultChecked={dDefault} />
 
             <div className="flex items-center gap-2">
-              <SubmitBotton text="Update" pendingText="Updating..." />
+              <SubmitBotton text={t("drawers.updateShipping.btnText")} pendingText={t("drawers.updateShipping.btnPendingText")} />
 
               <button
                 className="w-16 flex justify-center items-center bg-red-500 disabled:bg-red-500/25 font-semibold rounded-xl select-none cursor-pointer py-2.5"

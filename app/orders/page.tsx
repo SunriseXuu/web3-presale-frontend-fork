@@ -3,13 +3,12 @@
 import { useEffect, useState, useRef, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 import OrderCard from "@/components/cards/OrderCard";
 import AppPlaceholder from "@/components/shared/AppPlaceholder";
 
 import { getOrders } from "@/action/orders.action";
-
-import { orderStatusMap } from "@/lib/constants";
 import { OrderType } from "@/lib/types";
 
 function OrdersPageContent() {
@@ -24,6 +23,16 @@ function OrdersPageContent() {
 
   const searchParams = useSearchParams();
   const status = searchParams.get("status");
+
+  const { t } = useTranslation();
+
+  // 订单状态常量
+  const orderStatusMap = [
+    { label: t("pages.orders.filterAll"), value: "all" },
+    { label: t("pages.orders.filterPending"), value: "pending" },
+    { label: t("pages.orders.filterPaid"), value: "paid" },
+    { label: t("pages.orders.filterCancelled"), value: "cancelled" },
+  ];
 
   // 拉取订单列表
   const fetchOrders = async () => {
@@ -96,7 +105,7 @@ function OrdersPageContent() {
           height={24}
           onClick={() => router.back()}
         />
-        <p className="font-bold">My Orders</p>
+        <p className="font-bold">{t("pages.orders.title")}</p>
         <div className="w-6" />
       </section>
 
@@ -120,16 +129,16 @@ function OrdersPageContent() {
         ))}
 
         <AppPlaceholder
-          text={orders.length > 0 ? "Loading more orders..." : "Loading orders..."}
+          text={orders.length > 0 ? t("pages.orders.loadingMore") : t("pages.orders.loadingInfo")}
           mode="loading"
           isShow={isFetching}
         />
         <AppPlaceholder
-          text="No more orders to load"
+          text={t("pages.orders.noMore")}
           mode="normal"
           isShow={orders.length > 0 && currPage > totalPageRef.current && !isFetching}
         />
-        <AppPlaceholder text="No orders found" mode="normal" isShow={orders.length === 0 && !isFetching} />
+        <AppPlaceholder text={t("pages.orders.notFound")} mode="normal" isShow={orders.length === 0 && !isFetching} />
       </section>
     </div>
   );

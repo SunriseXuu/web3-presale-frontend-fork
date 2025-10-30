@@ -2,7 +2,7 @@ import { SystemProgram, PublicKey } from "@solana/web3.js";
 import { ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddress } from "@solana/spl-token";
 import { Program, AnchorProvider, utils, BN, setProvider } from "@coral-xyz/anchor";
 
-import { DEVNET_USDC, PLATFORM_WALLET, USD_DECIMALS } from "@/lib/constants";
+import { DEVNET_USDC, PLATFORM_WALLET, USD_DECIMALS } from "@/lib/configs";
 import idl from "@/lib/idl/presale_contract.json";
 
 export const payWithSolana = async ({
@@ -22,7 +22,7 @@ export const payWithSolana = async ({
   buyer: any;
   connection: any;
 }) => {
-  if (!buyerWallet || !buyer || !connection) throw new Error("Wallet not connected.");
+  if (!buyerWallet || !buyer || !connection) throw new Error("Please connect your wallet first");
 
   // 1. 创建 provider
   const provider = new AnchorProvider(connection, buyerWallet, {});
@@ -41,15 +41,12 @@ export const payWithSolana = async ({
   const buyerTokenAccount = await getAssociatedTokenAddress(tokenMint, buyer);
   const platformTokenAccount = await getAssociatedTokenAddress(tokenMint, platformAuthority);
 
-  // 检查买家 token 账户是否存在
+  // 检查买家 USDC/USDT 余额是否足够 - 账户不存在也视为余额不足
   const buyerTokenAccountInfoRaw = await connection.getAccountInfo(buyerTokenAccount);
-  if (!buyerTokenAccountInfoRaw) throw new Error("Buyer token account does not exist.");
-
-  // 检查买家 USDC/USDT 余额是否足够
+  if (!buyerTokenAccountInfoRaw) throw new Error("Insufficient balance");
   const buyerTokenAccountInfo = await connection.getTokenAccountBalance(buyerTokenAccount);
-  const totalPrice = price * quantity;
   const buyerUsdcBalance = buyerTokenAccountInfo.value.uiAmount * USD_DECIMALS;
-  if (buyerUsdcBalance < totalPrice) throw new Error("Insufficient balance.");
+  if (buyerUsdcBalance < price * quantity) throw new Error("Insufficient balance");
 
   // 5. 调用 purchase 指令
   const txHash = await program.methods

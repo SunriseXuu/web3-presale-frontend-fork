@@ -1,7 +1,13 @@
+"use client";
+
+import { useTranslation } from "react-i18next";
+
 import UpdateShippingDrawer from "@/components/drawers/UpdateShippingDrawer";
 import { ShippingAddressType } from "@/lib/types";
 
 export default function ShippingCard({ id, name, phone, address, is_default }: ShippingAddressType) {
+  const { t } = useTranslation();
+
   const dValue = {
     id,
     dName: name,
@@ -17,7 +23,7 @@ export default function ShippingCard({ id, name, phone, address, is_default }: S
         <div className="flex items-center text-sm text-zinc-400 gap-3">
           <span>{name}</span>
           <span>{phone}</span>
-          {is_default && <span className="text-xs text-primary font-bold">DEFAULT</span>}
+          {is_default && <span className="text-xs text-primary font-bold">{t("cards.shipping.defaultTag")}</span>}
         </div>
       </div>
 

@@ -18,6 +18,17 @@
       "langs": "Language Settings",
       "help": "Help Center"
     },
+    "orders": {
+      "title": "My Orders",
+      "filterAll": "All",
+      "filterPending": "Pending",
+      "filterPaid": "Paid",
+      "filterCancelled": "Cancelled",
+      "loadingInfo": "Loading orders...",
+      "loadingMore": "Loading more orders...",
+      "noMore": "No more orders",
+      "notFound": "No orders found"
+    },
     "shipping": {
       "title": "Shipping Addresses",
       "default": "Default Address",
@@ -54,7 +65,29 @@
       "left": "Left"
     }
   },
-  "drawer": {
+  "cards": {
+    "address": {
+      "defaultTag": "DEFAULT",
+      "placeholder": "Select shipping address"
+    },
+    "shipping": {
+      "defaultTag": "DEFAULT"
+    }
+  },
+  "drawers": {
+    "product": {
+      "title": "Check Your Order",
+      "unitPrice": "Unit Price",
+      "currency": "Currency",
+      "amount": "Amount",
+      "btnText": "Buy Now",
+      "connectErr": "Please connect your wallet first",
+      "purchased": "Product purchased, please check out your order page later",
+      "insufficientErr": "Insufficient balance, please top up your wallet",
+      "simulationErr": "This transaction has already been processed",
+      "rejectedErr": "Order placed but request rejected, please complete the payment in your order page later",
+      "txErr": "Transaction failed, please complete the payment in your order page later"
+    },
     "addShipping": {
       "triggerText": "Add",
       "title": "Add New Shipping Address",

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 
 import AppInput from "@/components/ui/AppInput";
@@ -14,6 +15,8 @@ import { createShippingAddress } from "@/action/shipping.action";
 export default function AddShippingDrawer() {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
 
+  const { t } = useTranslation();
+
   // 处理添加收货地址逻辑
   const addShippingAction = async (formData: FormData) => {
     const name = formData.get("name") as string;
@@ -23,11 +26,11 @@ export default function AddShippingDrawer() {
 
     const { success } = await createShippingAddress({ name, phone, address, is_default });
     if (!success) {
-      toast.error("Failed to add shipping address");
+      toast.error(t("drawers.addShipping.addErr"));
       return;
     }
 
-    toast.success("New shipping address added.");
+    toast.success(t("drawers.addShipping.added"));
     setIsDrawerOpen(false);
 
     location.reload(); // TODO:
@@ -37,27 +40,41 @@ export default function AddShippingDrawer() {
     <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
       <DrawerTrigger asChild>
         <button className="w-12 text-sm font-medium" type="button">
-          + Add
+          + {t("drawers.addShipping.triggerText")}
         </button>
       </DrawerTrigger>
 
       <DrawerContent className="min-w-[350px] max-w-[450px] min-h-[200px] bg-surface border-none rounded-t-2xl! mx-auto">
         <div className="flex flex-col px-4 pt-4 pb-8 gap-5">
-          <DrawerTitle className="text-white text-xl font-semibold">Add New Shipping Address</DrawerTitle>
+          <DrawerTitle className="text-white text-xl font-semibold">{t("drawers.addShipping.title")}</DrawerTitle>
 
           <form action={addShippingAction} className="flex flex-col gap-4">
-            <AppInput id="recipient_name" label="Recipient Name" name="name" placeholder="e.g. John Doe" type="text" />
             <AppInput
-              id="phone_number"
-              label="Phone Number"
-              name="phone"
-              placeholder="e.g. +1 234 567 890"
+              id="recipient_name"
+              label={t("drawers.addShipping.recipientLabel")}
+              name="name"
+              placeholder={t("drawers.addShipping.recipientPlaceholder")}
               type="text"
             />
-            <AppTextarea id="address" label="Address" name="address" placeholder="e.g. 123 Main St, City, Country" />
-            <AppSwitcher label="Set as default" name="is_default" />
+            <AppInput
+              id="phone_number"
+              label={t("drawers.addShipping.phoneLabel")}
+              name="phone"
+              placeholder={t("drawers.addShipping.phonePlaceholder")}
+              type="text"
+            />
+            <AppTextarea
+              id="address"
+              label={t("drawers.addShipping.addressLabel")}
+              name="address"
+              placeholder={t("drawers.addShipping.addressPlaceholder")}
+            />
+            <AppSwitcher label={t("drawers.addShipping.defaultLabel")} name="is_default" />
 
-            <SubmitBotton text="Add" pendingText="Adding..." />
+            <SubmitBotton
+              text={t("drawers.addShipping.btnText")}
+              pendingText={t("drawers.addShipping.btnPendingText")}
+            />
           </form>
         </div>
       </DrawerContent>

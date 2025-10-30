@@ -1,4 +1,7 @@
+"use client";
+
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface CountdownTimerProps {
   createdAt: string;
@@ -16,6 +19,8 @@ export default function CountdownTimer({ createdAt }: CountdownTimerProps) {
     return Math.max(0, Math.floor((end - now) / 1000));
   });
 
+  const { t } = useTranslation();
+
   const mm = pad(Math.floor(timeLeft / 60));
   const ss = pad(timeLeft % 60);
 
@@ -27,11 +32,11 @@ export default function CountdownTimer({ createdAt }: CountdownTimerProps) {
     return () => clearInterval(timer);
   }, [timeLeft]);
 
-  if (timeLeft <= 0) return <span className="text-xs text-red-500">Cancelled</span>;
+  if (timeLeft <= 0) return <span className="text-xs text-red-500">{t("shared.countdown.cancelled")}</span>;
 
   return (
     <span className="text-xs text-orange-500">
-      {mm}:{ss} Left
+      {mm}:{ss} {t("shared.countdown.left")}
     </span>
   );
 }
