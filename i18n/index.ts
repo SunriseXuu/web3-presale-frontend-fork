@@ -2,10 +2,10 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
+import { I18N_CACHE_KEY } from "@/lib/configs";
+
 import zh from "@/i18n/langs/zh.json";
 import en from "@/i18n/langs/en.json";
-
-export const I18N_CACHE_KEY = "i18nextLng";
 
 export const resources = {
   zh: { translation: zh, key: "zh", label: "简体中文" },
@@ -14,8 +14,8 @@ export const resources = {
 
 const i18nConfig = {
   resources,
+  // lng: "zh", // 使用语言探测器时可注释掉
   fallbackLng: "zh",
-  lng: "zh",
   detection: {
     order: ["localStorage", "navigator"],
     caches: ["localStorage"],
@@ -25,19 +25,17 @@ const i18nConfig = {
 
 i18n.use(LanguageDetector).use(initReactI18next).init(i18nConfig);
 
-const supportLanguage = new Set(Object.keys(i18nConfig.resources));
+// 获取当前语言
+export const getCurrLang = () => i18n.language;
 
-export const changeLang = async (lang: string) => {
-  if (!supportLanguage.has(lang)) return;
-  if (i18n.language === lang) return; // 避免重复设置相同语言
+// 切换当前语言
+export const changeCurrLang = async (lang: "zh" | "en") => {
+  // 避免设置不存在的语言，或重复设置相同语言
+  if (!new Set(Object.keys(i18nConfig.resources)).has(lang) || i18n.language === lang || typeof window === "undefined")
+    return;
 
+  localStorage.setItem(I18N_CACHE_KEY, lang);
   i18n.changeLanguage(lang);
-
-  if (typeof window !== "undefined") localStorage.setItem(I18N_CACHE_KEY, lang);
-};
-
-export const currLang = () => {
-  return i18n.language;
 };
 
 export default i18n;

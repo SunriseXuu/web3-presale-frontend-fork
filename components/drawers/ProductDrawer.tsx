@@ -21,11 +21,11 @@ export default function ProductDrawer({
   description,
   price,
   images,
-  isProductDrawerOpen,
-  getIsProductDrawerOpen,
+  isDrawerOpen,
+  getIsDrawerOpen,
 }: ProductType & {
-  isProductDrawerOpen: boolean;
-  getIsProductDrawerOpen: (open: boolean) => void;
+  isDrawerOpen: boolean;
+  getIsDrawerOpen: (open: boolean) => void;
 }) {
   const [quantity, setQuantity] = useState<number>(1);
   const [currency, setCurrency] = useState<string>("USDC");
@@ -95,11 +95,11 @@ export default function ProductDrawer({
     }
 
     setIsBtnLoading(false);
-    getIsProductDrawerOpen(false);
+    getIsDrawerOpen(false);
   };
 
   return (
-    <Drawer open={isProductDrawerOpen} onOpenChange={getIsProductDrawerOpen}>
+    <Drawer open={isDrawerOpen} onOpenChange={getIsDrawerOpen}>
       <DrawerTrigger asChild>
         <button
           className="w-36 h-7 flex justify-center items-center bg-primary rounded-lg cursor-pointer select-none outline-none gap-0.5"
@@ -112,10 +112,10 @@ export default function ProductDrawer({
 
       <DrawerContent className="min-w-[350px] max-w-[450px] min-h-[200px] bg-surface border-none rounded-t-2xl! mx-auto">
         <div className="flex flex-col px-4 pt-4 pb-8 gap-5">
-          <DrawerTitle className="text-white text-xl font-semibold">{t("drawers.product.title")}</DrawerTitle>
+          <DrawerTitle className="text-xl text-white font-semibold">{t("drawers.product.title")}</DrawerTitle>
 
           <SelectShippingDrawer
-            isProductDrawerOpen={isProductDrawerOpen}
+            isProductDrawerOpen={isDrawerOpen}
             selectedAddr={selectedAddr}
             getSelectedAddr={setSelectedAddr}
           />
@@ -204,7 +204,7 @@ export default function ProductDrawer({
           <p className="text-xs text-zinc-400 line-clamp-3">{description}</p>
 
           <button
-            className="w-full flex justify-center items-center bg-primary disabled:bg-primary/25 font-semibold rounded-lg cursor-pointer select-none py-2.5 gap-3"
+            className="w-full flex justify-center items-center bg-primary disabled:bg-primary/25 font-semibold rounded-lg cursor-pointer py-2.5 gap-3"
             type="button"
             disabled={!selectedAddr || isBtnLoading}
             onClick={handlePurchase}

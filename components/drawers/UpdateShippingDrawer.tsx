@@ -71,7 +71,7 @@ export default function UpdateShippingDrawer({
 
       <DrawerContent className="min-w-[350px] max-w-[450px] min-h-[200px] bg-surface border-none rounded-t-2xl! mx-auto">
         <div className="flex flex-col px-4 pt-4 pb-8 gap-5">
-          <DrawerTitle className="text-white text-xl font-semibold">{t("drawers.updateShipping.title")}</DrawerTitle>
+          <DrawerTitle className="text-xl text-white font-semibold">{t("drawers.updateShipping.title")}</DrawerTitle>
 
           <form action={updateShippingAction} className="flex flex-col gap-4">
             <AppInput
@@ -100,7 +100,10 @@ export default function UpdateShippingDrawer({
             <AppSwitcher label={t("drawers.updateShipping.defaultLabel")} name="is_default" defaultChecked={dDefault} />
 
             <div className="flex items-center gap-2">
-              <SubmitBotton text={t("drawers.updateShipping.btnText")} pendingText={t("drawers.updateShipping.btnPendingText")} />
+              <SubmitBotton
+                text={t("drawers.updateShipping.btnText")}
+                pendingText={t("drawers.updateShipping.btnPendingText")}
+              />
 
               <button
                 className="w-16 flex justify-center items-center bg-red-500 disabled:bg-red-500/25 font-semibold rounded-xl select-none cursor-pointer py-2.5"

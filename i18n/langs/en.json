@@ -15,7 +15,6 @@
       "cancelled": "Cancelled",
       "settings": "Settings",
       "shippings": "Shipping Addresses",
-      "langs": "Language Settings",
       "help": "Help Center"
     },
     "orders": {
@@ -125,6 +124,10 @@
       "updated": "Shipping address updated",
       "deleteErr": "Failed to delete shipping address",
       "deleted": "Shipping address deleted"
+    },
+    "selectLang": {
+      "label": "Language Settings",
+      "title": "Select Language"
     }
   },
   "wallet": {

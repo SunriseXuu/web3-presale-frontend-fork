@@ -15,7 +15,6 @@
       "cancelled": "已取消",
       "settings": "设置",
       "shippings": "收货地址",
-      "langs": "语言设置",
       "help": "帮助中心"
     },
     "orders": {
@@ -125,6 +124,10 @@
       "updated": "收货地址已更新",
       "deleteErr": "删除收货地址失败",
       "deleted": "收货地址已删除"
+    },
+    "selectLang": {
+      "label": "语言设置",
+      "title": "选择语言"
     }
   },
   "wallet": {

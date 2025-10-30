@@ -6,7 +6,7 @@ import ProductDrawer from "@/components/drawers/ProductDrawer";
 import { ProductType } from "@/lib/types";
 
 export default function ProductCard(productProps: ProductType) {
-  const [isProductDrawerOpen, setIsProductDrawerOpen] = useState<boolean>(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
 
   return (
     <div className="flex flex-col items-center bg-neutral rounded-xl shadow-md overflow-hidden gap-2">
@@ -16,7 +16,7 @@ export default function ProductCard(productProps: ProductType) {
         }`}
         src={productProps.images[0] || "/no-img.svg"}
         alt={productProps.name}
-        onClick={() => setIsProductDrawerOpen(true)}
+        onClick={() => setIsDrawerOpen(true)}
         onError={(e) => {
           const img = e.currentTarget as HTMLImageElement;
           img.src = "/no-img.svg";
@@ -26,14 +26,14 @@ export default function ProductCard(productProps: ProductType) {
       />
 
       <div className="flex flex-col items-center px-2 pb-3 gap-3">
-        <h3 className="text-sm font-medium cursor-pointer line-clamp-1" onClick={() => setIsProductDrawerOpen(true)}>
+        <h3 className="text-sm font-medium cursor-pointer line-clamp-1" onClick={() => setIsDrawerOpen(true)}>
           {productProps.name}
         </h3>
 
         <ProductDrawer
           {...productProps}
-          isProductDrawerOpen={isProductDrawerOpen}
-          getIsProductDrawerOpen={setIsProductDrawerOpen}
+          isDrawerOpen={isDrawerOpen}
+          getIsDrawerOpen={setIsDrawerOpen}
         />
       </div>
     </div>

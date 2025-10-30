@@ -4,8 +4,9 @@ import Link from "next/link";
 import { useTranslation } from "react-i18next";
 
 import ConnectButton from "@/components/wallet/ConnectButton";
+import SelectLangDrawer from "@/components/drawers/SelectLangDrawer";
 
-export default function page() {
+export default function MePage() {
   const { t } = useTranslation();
 
   // 订单入口常量
@@ -75,10 +76,7 @@ export default function page() {
           </Link>
           <hr className="border-zinc-600" />
 
-          <Link className="flex justify-between items-center" href="/language">
-            <span className="text-sm">{t("pages.me.langs")}</span>
-            <img className="w-4 h-4" src="/chevron-r.svg" alt="ChevronR" width={16} height={16} />
-          </Link>
+          <SelectLangDrawer />
           <hr className="border-zinc-600" />
 
           <Link className="flex justify-between items-center" href="/help">

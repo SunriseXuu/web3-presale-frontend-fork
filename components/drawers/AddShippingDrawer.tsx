@@ -46,7 +46,7 @@ export default function AddShippingDrawer() {
 
       <DrawerContent className="min-w-[350px] max-w-[450px] min-h-[200px] bg-surface border-none rounded-t-2xl! mx-auto">
         <div className="flex flex-col px-4 pt-4 pb-8 gap-5">
-          <DrawerTitle className="text-white text-xl font-semibold">{t("drawers.addShipping.title")}</DrawerTitle>
+          <DrawerTitle className="text-xl text-white font-semibold">{t("drawers.addShipping.title")}</DrawerTitle>
 
           <form action={addShippingAction} className="flex flex-col gap-4">
             <AppInput

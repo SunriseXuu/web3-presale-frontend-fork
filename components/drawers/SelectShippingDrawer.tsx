@@ -21,8 +21,8 @@ export default function SelectShippingDrawer({
   getSelectedAddr: (addr: ShippingAddressType) => void;
 }) {
   const [shippingAddrs, setShippingAddrs] = useState<ShippingAddressType[]>([]);
-  const [isShippingDrawerOpen, setIsShippingDrawerOpen] = useState<boolean>(false);
-  const [isAddressFetching, setIsAddressFetching] = useState<boolean>(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -33,7 +33,7 @@ export default function SelectShippingDrawer({
     if (selectedAddr && shippingAddrs.length > 0) return; // 已经获取过地址则不再获取
 
     (async () => {
-      setIsAddressFetching(true);
+      setIsFetching(true);
 
       const { data: shippingAddressesData, success, error } = await getShippingAddresses();
       if (!success) {
@@ -43,8 +43,8 @@ export default function SelectShippingDrawer({
           router.push("/me");
         }
 
-        setIsAddressFetching(false);
-        setIsShippingDrawerOpen(false);
+        setIsFetching(false);
+        setIsDrawerOpen(false);
         return;
       }
 
@@ -58,12 +58,12 @@ export default function SelectShippingDrawer({
       // 全部地址列表
       setShippingAddrs(shAddrs);
 
-      setIsAddressFetching(false);
+      setIsFetching(false);
     })();
   }, [isProductDrawerOpen]);
 
   return (
-    <Drawer open={isShippingDrawerOpen} onOpenChange={setIsShippingDrawerOpen}>
+    <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
       <DrawerTrigger asChild>
         {/** 用原生组件包裹一层以使其可以打开弹窗 */}
         <div>
@@ -73,7 +73,7 @@ export default function SelectShippingDrawer({
 
       <DrawerContent className="min-w-[350px] max-w-[450px] min-h-[200px] bg-surface border-none rounded-t-2xl! mx-auto">
         <div className="flex flex-col px-4 pt-4 pb-8 mb-8 gap-5">
-          <DrawerTitle className="text-white text-xl font-semibold">{t("drawers.selectShipping.title")}</DrawerTitle>
+          <DrawerTitle className="text-xl text-white font-semibold">{t("drawers.selectShipping.title")}</DrawerTitle>
 
           <div className="flex flex-col gap-4">
             {shippingAddrs.map((addr) => (
@@ -84,19 +84,19 @@ export default function SelectShippingDrawer({
                 isSelected={selectedAddr?.id === addr.id}
                 onSelect={() => {
                   getSelectedAddr(addr);
-                  setIsShippingDrawerOpen(false);
+                  setIsDrawerOpen(false);
                 }}
               />
             ))}
 
-            <AppPlaceholder text={t("drawers.selectShipping.loading")} mode="loading" isShow={isAddressFetching} />
+            <AppPlaceholder text={t("drawers.selectShipping.loading")} mode="loading" isShow={isFetching} />
             <div className="flex flex-col items-center">
               <AppPlaceholder
                 text={t("drawers.selectShipping.notFound")}
                 mode="normal"
-                isShow={shippingAddrs.length === 0 && !isAddressFetching}
+                isShow={shippingAddrs.length === 0 && !isFetching}
               />
-              {shippingAddrs.length === 0 && !isAddressFetching && (
+              {shippingAddrs.length === 0 && !isFetching && (
                 <Link href="/shipping" className="text-center text-primary border-b border-primary">
                   {t("drawers.selectShipping.goAdd")}
                 </Link>

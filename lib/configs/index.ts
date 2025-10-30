@@ -13,3 +13,6 @@ export const USER_STORE = "MY_SHOP_USER";
 
 // USDC 精度常量
 export const USD_DECIMALS = 10 ** 6;
+
+// i18n 相关配置
+export const I18N_CACHE_KEY = "I18NEXT_LNG";

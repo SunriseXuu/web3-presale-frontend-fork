@@ -18,7 +18,7 @@ export const loginUser = async (reqBody: { wallet_address: string; signature: st
   });
 
   // 如果有JWT和USER，则存储到本地存储
-  if (typeof res.data.token === "string" && res.data.token && res.data.user) {
+  if (typeof res.data.token === "string" && res.data.token && res.data.user && typeof window !== "undefined") {
     localStorage.setItem(AUTH_STORE, res.data.token);
     localStorage.setItem(USER_STORE, encodeURIComponent(JSON.stringify(res.data.user)));
   }
