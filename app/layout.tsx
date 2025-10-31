@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="zh">
+    <html lang="zh_cn">
       <body className="bg-black/90 text-white scrollbar-hide">
         <I18nextProvider>
           <WalletProviders>

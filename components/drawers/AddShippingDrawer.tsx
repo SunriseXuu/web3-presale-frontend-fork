@@ -39,7 +39,7 @@ export default function AddShippingDrawer() {
   return (
     <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
       <DrawerTrigger asChild>
-        <button className="w-12 text-sm font-medium" type="button">
+        <button className="w-12 text-sm font-medium cursor-pointer" type="button">
           + {t("drawers.addShipping.triggerText")}
         </button>
       </DrawerTrigger>

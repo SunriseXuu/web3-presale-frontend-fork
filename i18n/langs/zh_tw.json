@@ -1,0 +1,142 @@
+{
+  "pages": {
+    "home": {
+      "title": "MyShop - 您唯一所需的Web3預售平台",
+      "loadingInfo": "正在載入產品...",
+      "loadingMore": "正在載入更多產品...",
+      "noMore": "沒有更多產品了",
+      "notFound": "未找到產品"
+    },
+    "me": {
+      "myOrders": "我的訂單",
+      "viewAll": "查看全部",
+      "pending": "待付款",
+      "paid": "已付款",
+      "cancelled": "已取消",
+      "settings": "設定",
+      "shippings": "收貨地址",
+      "help": "幫助中心"
+    },
+    "orders": {
+      "title": "我的訂單",
+      "filterAll": "全部",
+      "filterPending": "待付款",
+      "filterPaid": "已付款",
+      "filterCancelled": "已取消",
+      "loadingInfo": "正在載入訂單...",
+      "loadingMore": "正在載入更多訂單...",
+      "noMore": "沒有更多訂單了",
+      "notFound": "未找到訂單"
+    },
+    "shipping": {
+      "title": "收貨地址",
+      "default": "預設地址",
+      "others": "其他地址",
+      "connectErr": "請先連接您的錢包",
+      "loadingDefault": "正在載入預設收貨地址...",
+      "defaultNotFound": "未找到預設收貨地址",
+      "loadingOthers": "正在載入其他收貨地址...",
+      "othersNotFound": "未找到其他收貨地址"
+    },
+    "help": {
+      "title": "幫助中心",
+      "process": "購買流程",
+      "processOne": "連接您最喜歡的Solana錢包，例如Phantom。",
+      "processTwo": "瀏覽並選擇可供預售的產品。",
+      "processThree": "使用您連接的錢包完成付款。",
+      "processFour": "享受送貨到府的產品！",
+      "faqs": "常見問題",
+      "faqOneQ": "如何連接我的錢包？",
+      "faqTwoQ": "接受哪些付款方式？",
+      "faqThreeQ": "運送需要多久時間？",
+      "faqOneA": "點擊「連接錢包」按鈕，按照提示連接您的錢包。",
+      "faqTwoA": "我們目前接受透過Solana錢包（如Phantom）進行的USDC/USDT付款。",
+      "faqThreeA": "運送時間可能會有所不同，但我們會盡快將產品送達您手中。"
+    }
+  },
+  "shared": {
+    "tabbar": {
+      "home": "首頁",
+      "me": "我的"
+    },
+    "countdown": {
+      "cancelled": "已取消",
+      "left": "剩餘"
+    }
+  },
+  "cards": {
+    "address": {
+      "defaultTag": "預設地址",
+      "placeholder": "選擇收貨地址"
+    },
+    "shipping": {
+      "defaultTag": "預設地址"
+    }
+  },
+  "drawers": {
+    "product": {
+      "title": "查看您的訂單",
+      "unitPrice": "產品單價",
+      "currency": "選擇貨幣",
+      "amount": "購買數量",
+      "btnText": "立即購買",
+      "connectErr": "請先連接您的錢包",
+      "purchased": "產品已購買，請稍後查看您的訂單頁面",
+      "insufficientErr": "餘額不足，請為您的錢包儲值",
+      "simulationErr": "該交易已被處理",
+      "rejectedErr": "已下單，但請求被拒絕，請稍後在您的訂單頁面完成付款",
+      "txErr": "交易失敗，請稍後在您的訂單頁面完成付款"
+    },
+    "addShipping": {
+      "triggerText": "新增",
+      "title": "新增收貨地址",
+      "recipientLabel": "收件人姓名",
+      "phoneLabel": "電話號碼",
+      "addressLabel": "地址",
+      "defaultLabel": "設為預設",
+      "recipientPlaceholder": "例如：張三",
+      "phonePlaceholder": "例如：+1 234 567 890",
+      "addressPlaceholder": "例如：123 大街，城市，國家",
+      "btnText": "新增",
+      "btnPendingText": "新增中...",
+      "addErr": "新增收貨地址失敗",
+      "added": "已新增收貨地址"
+    },
+    "selectShipping": {
+      "title": "選擇收貨地址",
+      "connectErr": "請先連接您的錢包",
+      "loading": "正在載入收貨地址...",
+      "notFound": "未找到收貨地址",
+      "goAdd": "去新增"
+    },
+    "updateShipping": {
+      "title": "更新收貨地址",
+      "recipientLabel": "收件人姓名",
+      "phoneLabel": "電話號碼",
+      "addressLabel": "地址",
+      "defaultLabel": "設為預設",
+      "recipientPlaceholder": "例如：張三",
+      "phonePlaceholder": "例如：+1 234 567 890",
+      "addressPlaceholder": "例如：123 大街，城市，國家",
+      "btnText": "更新",
+      "btnPendingText": "更新中...",
+      "updateErr": "更新收貨地址失敗",
+      "updated": "收貨地址已更新",
+      "deleteErr": "刪除收貨地址失敗",
+      "deleted": "收貨地址已刪除"
+    },
+    "selectLang": {
+      "label": "語言設定",
+      "title": "選擇語言"
+    }
+  },
+  "wallet": {
+    "connectWallet": "連接錢包",
+    "connecting": "連接中...",
+    "connected": "錢包已連接",
+    "disconnected": "錢包已斷開連接",
+    "nonceErr": "無法取得nonce，請重試",
+    "loginErr": "錢包登入失敗，請重試",
+    "rejected": "已拒絕錢包連接"
+  }
+}

@@ -8,15 +8,16 @@ import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "@/components/
 
 export default function SelectLangDrawer() {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
-  const [currLang, setCurrLang] = useState<"简体中文" | "English">("简体中文");
+  const [currLang, setCurrLang] = useState<"简体中文" | "繁体中文" | "English">("简体中文");
 
   const { t } = useTranslation();
 
   // 切换语言
-  const switchLang = (lang: "zh" | "en") => {
+  const switchLang = (lang: "zh_cn" | "zh_tw" | "en") => {
     changeCurrLang(lang);
 
-    if (lang === "zh") setCurrLang("简体中文");
+    if (lang === "zh_cn") setCurrLang("简体中文");
+    else if (lang === "zh_tw") setCurrLang("繁体中文");
     else if (lang === "en") setCurrLang("English");
 
     setIsDrawerOpen(false);
@@ -26,7 +27,8 @@ export default function SelectLangDrawer() {
   useEffect(() => {
     const lang = getCurrLang();
 
-    if (lang === "zh") setCurrLang("简体中文");
+    if (lang === "zh_cn") setCurrLang("简体中文");
+    else if (lang === "zh_tw") setCurrLang("繁体中文");
     else if (lang === "en") setCurrLang("English");
   }, []);
 
@@ -53,9 +55,18 @@ export default function SelectLangDrawer() {
                 currLang === "简体中文" ? "bg-primary" : "bg-neutral"
               } text-center cursor-pointer rounded-lg py-2.5`}
               type="button"
-              onClick={() => switchLang("zh")}
+              onClick={() => switchLang("zh_cn")}
             >
               简体中文
+            </button>
+            <button
+              className={`w-full ${
+                currLang === "繁体中文" ? "bg-primary" : "bg-neutral"
+              } text-center cursor-pointer rounded-lg py-2.5`}
+              type="button"
+              onClick={() => switchLang("zh_tw")}
+            >
+              繁体中文
             </button>
             <button
               className={`w-full ${
